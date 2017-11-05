@@ -8,7 +8,7 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 
-class ElementFactory {
+class ElementCreator {
 
     static JButton makeButton(String text) {
         JButton button = new JButton(text);

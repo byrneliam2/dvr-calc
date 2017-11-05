@@ -25,7 +25,6 @@ public class DistanceVectorRouter {
     // status checkers
     private boolean hasBeenRun;
     private boolean hasBeenLoaded;
-    private boolean hasNewLink;
 
     public DistanceVectorRouter() {
         UI.setDivider(0.25);
@@ -36,33 +35,27 @@ public class DistanceVectorRouter {
         UI.addButton("Load Map", this::onLoad);
         UI.addButton("", () -> {});
         UI.addButton("Run", this::onStart).setBackground(Color.GREEN);
-        UI.addButton("Add Link", this::onAddLink);
         UI.addButton("Random Route", this::onRoute);
 
-        hasBeenRun = false;
-        hasBeenLoaded = false;
-        hasNewLink = false;
+        hasBeenRun = hasBeenLoaded = false;
     }
 
     /**
      * Run the distance vector routing algorithm.
      */
     private void onStart() {
-        if (!hasBeenLoaded) {
-            printError("Please load a topology first.");
-            return;
-        }
+        if (isError(!hasBeenLoaded, "Please load a topology first.")) return;
 
         Timer.start();
+        // for every node (as in Bellman-Ford)
         for (int i = 0; i < nodes.size(); i++) {
-            //1. initialise
-            //2. update neighbours
+            // for every node (literal)
             for (Node node : this.nodes) {
+                // for all of its neighbours
                 for (Map.Entry m : node.getNeighbours().entrySet()) {
                     char key = (char) m.getKey();
                     int dist = (int) m.getValue();
                     Node neighbour = new DVUtils(nodes).find(key);
-                    assert neighbour != null;
                     // send the table of this node to the neighbour
                     neighbour.updateRoutingTable(node, dist, node.getTable());
                 }
@@ -77,61 +70,12 @@ public class DistanceVectorRouter {
     }
 
     /**
-     * Add one new node to the graph. The node always appears in the same place with the same key
-     * but it has a varying number of neighbours every time.
-     */
-    private void onAddLink() {
-        if (!hasBeenRun) {
-            printError("DVR algorithm must be executed\nbefore links can be added.");
-            return;
-        }
-        if (hasNewLink) {
-            printError("New link already exists.");
-            return;
-        }
-
-        // create a new node
-        Node q = new Node('Q', 500, 500);
-        nodes.add(q);
-
-        // randomly assign it neighbours
-        while (q.getNeighbours().isEmpty()) {
-            for (Node n : nodes) {
-                if (n == q) continue;
-                if (Math.random() > 0.5) {
-                    int cost = (int) (Math.random() * 10);
-                    while (cost == 0) cost = (int) (Math.random() * 10);
-                    // the simulateNewLink method combines the addition
-                    // of q as a neighbour and resetting its table
-                    q.addNeighbour(n.getKey(), cost);
-                    n.simulateNewLink(q.getKey(), cost, nodes);
-                }
-                else {
-                    // reset routing table to contain the new node
-                    // as a destination
-                    n.setupRoutingTable(nodes);
-                }
-            }
-        }
-        // set up q's table now that all neighbours are added
-        q.setupRoutingTable(nodes);
-
-        // redraw
-        UI.clearGraphics();
-        onStart();
-        draw();
-
-        hasNewLink = true;
-    }
-
-    /**
      * Generate a route between two random nodes using the complete routing table.
      */
     private void onRoute() {
-        if (!hasBeenRun) {
-            printError("DVR algorithm must be executed\nbefore routing can be performed.");
+        if (isError(!hasBeenRun,
+                "DVR algorithm must be executed\nbefore routing can be performed."))
             return;
-        }
 
         // get two random nodes
         Random rand = new Random();
@@ -180,7 +124,6 @@ public class DistanceVectorRouter {
         // clean up on every load
         nodes.clear();
         hasBeenRun = false;
-        hasNewLink = false;
         UI.clearPanes();
 
         try {
@@ -295,8 +238,14 @@ public class DistanceVectorRouter {
         currentPath.clear();
     }
 
-    private void printError(String msg) {
-        UI.println(msg);
+    /**
+     * Check for errors and return the result of the check.
+     */
+    private boolean isError(boolean condition, String errorMsg) {
+        if (condition) {
+            UI.println(errorMsg);
+            return true;
+        } return false;
     }
 
     /* ==================================================================================== */

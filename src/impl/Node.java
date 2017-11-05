@@ -29,7 +29,7 @@ public class Node {
     /**
      * Initialises the routing table.
      */
-    public void setupRoutingTable(List<Node> nodes) {
+    void setupRoutingTable(List<Node> nodes) {
         this.table = new RoutingTable(nodes.size() - 1, neighbours.size());
         char[] dests = new char[nodes.size() - 1]; int destCount = 0;
         List<Character> neighbourList = neighbours.keySet().stream().sorted().collect(Collectors.toList());
@@ -40,7 +40,7 @@ public class Node {
             int count = 0;
             // get the neighbours of this node and add link values
             // iff this node is a direct neighbour of it
-            // Integer.MAX_VALUE if no direct link
+            // (Integer.MAX_VALUE if no direct link)
             for (Character c : neighbourList) {
                 Node route = new DistanceVectorRouter.DVUtils(nodes).find(c);
                 if (route == dest)
@@ -62,7 +62,7 @@ public class Node {
      * Updates the routing table in this node by analysing the given one and replacing
      * any values that are now obsolete.
      */
-    public void updateRoutingTable(Node fromNode, int fromDist, RoutingTable fromTable) {
+    void updateRoutingTable(Node fromNode, int fromDist, RoutingTable fromTable) {
         // for each destination in the given table
         for (int d = 0; d < fromTable.destinationSize(); d++) {
             // for each neighbour in this row
@@ -88,7 +88,7 @@ public class Node {
      * @param cost cost of the direct link
      * @param nodes parameter for re-initialising
      */
-    public void simulateNewLink(char key, int cost, List<Node> nodes) {
+    void simulateNewLink(char key, int cost, List<Node> nodes) {
         addNeighbour(key, cost);
         setupRoutingTable(nodes);
     }
@@ -103,23 +103,23 @@ public class Node {
 
     /* =========================================================================================== */
 
-    public char getKey() {
+    char getKey() {
         return key;
     }
 
-    public int getX() {
+    int getX() {
         return x;
     }
 
-    public int getY() {
+    int getY() {
         return y;
     }
 
-    public HashMap<Character, Integer> getNeighbours() {
+    HashMap<Character, Integer> getNeighbours() {
         return neighbours;
     }
 
-    public RoutingTable getTable() {
+    RoutingTable getTable() {
         return table;
     }
 }

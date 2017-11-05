@@ -10,5 +10,5 @@ Loads topology files and generates routing tables for each router. Uses relaxati
 - [x] Basic route finding mechanism using the generated tables
 - [ ] Interactive graph showing individual tables for each node
 - [ ] Table highlighting to show best route
-- [ ] Updated route finding
+- [ ] Updated route finding (link state)
 - [ ] Standardised file formatting (e.g. XML, JSON)

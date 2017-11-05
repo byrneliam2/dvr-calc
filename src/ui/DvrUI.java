@@ -9,6 +9,9 @@ import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
+/**
+ * Primary hosting class for the UI component set.
+ */
 public class DvrUI {
 
     // Swing components
@@ -30,6 +33,7 @@ public class DvrUI {
      * Build the master frame on setup.
      */
     private void buildFrame() {
+        master.setIconImage(new ImageIcon("res/github.png").getImage());
         master.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         master.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         master.setResizable(false);
@@ -38,8 +42,8 @@ public class DvrUI {
         JToolBar toolBar = new JToolBar();
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         toolBar.setFloatable(false);
-        JButton load = ElementFactory.makeButton("Load");
-        JButton run = ElementFactory.makeButton("Run");
+        JButton load = ElementCreator.makeButton("Load");
+        JButton run = ElementCreator.makeButton("Run");
         toolBar.add(load);
         toolBar.add(run);
 
@@ -64,6 +68,10 @@ public class DvrUI {
 
         master.pack();
         master.setVisible(true);
+    }
+
+    public void paint() {
+
     }
 
     /**
