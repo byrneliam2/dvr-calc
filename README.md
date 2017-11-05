@@ -1,4 +1,4 @@
-# dvr-calc
+# dvr-calculator
 Distance Vector Routing (DVR) protocol simulator and routing table generator. 
 
 Loads topology files and generates routing tables for each router. Uses relaxation via the Bellman-Ford algorithm to scan the graph as many times as there are nodes present. Based off lab work done in a network applications course at university.
