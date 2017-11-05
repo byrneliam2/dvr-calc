@@ -27,17 +27,17 @@ public class DistanceVectorRouter {
     private boolean hasBeenLoaded;
     private boolean hasNewLink;
 
-    private DistanceVectorRouter() {
+    public DistanceVectorRouter() {
         UI.setDivider(0.25);
         UI.setWindowSize(1152, 648);
         UI.getFrame().setTitle("Distance Vector Router");
         UI.initialise();
 
-        UI.addButton("Load Map", this::load);
+        UI.addButton("Load Map", this::onLoad);
         UI.addButton("", () -> {});
-        UI.addButton("Run", this::run).setBackground(Color.GREEN);
-        UI.addButton("Add Link", this::addLink);
-        UI.addButton("Random Route", this::route);
+        UI.addButton("Run", this::onStart).setBackground(Color.GREEN);
+        UI.addButton("Add Link", this::onAddLink);
+        UI.addButton("Random Route", this::onRoute);
 
         hasBeenRun = false;
         hasBeenLoaded = false;
@@ -47,7 +47,7 @@ public class DistanceVectorRouter {
     /**
      * Run the distance vector routing algorithm.
      */
-    private void run() {
+    private void onStart() {
         if (!hasBeenLoaded) {
             printError("Please load a topology first.");
             return;
@@ -80,7 +80,7 @@ public class DistanceVectorRouter {
      * Add one new node to the graph. The node always appears in the same place with the same key
      * but it has a varying number of neighbours every time.
      */
-    private void addLink() {
+    private void onAddLink() {
         if (!hasBeenRun) {
             printError("DVR algorithm must be executed\nbefore links can be added.");
             return;
@@ -118,7 +118,7 @@ public class DistanceVectorRouter {
 
         // redraw
         UI.clearGraphics();
-        run();
+        onStart();
         draw();
 
         hasNewLink = true;
@@ -127,7 +127,7 @@ public class DistanceVectorRouter {
     /**
      * Generate a route between two random nodes using the complete routing table.
      */
-    private void route() {
+    private void onRoute() {
         if (!hasBeenRun) {
             printError("DVR algorithm must be executed\nbefore routing can be performed.");
             return;
@@ -176,7 +176,7 @@ public class DistanceVectorRouter {
     /**
      * Load the nodes from the topology file and setup the routing table for each node.
      */
-    private void load() {
+    private void onLoad() {
         // clean up on every load
         nodes.clear();
         hasBeenRun = false;
@@ -297,10 +297,6 @@ public class DistanceVectorRouter {
 
     private void printError(String msg) {
         UI.println(msg);
-    }
-
-    public static void main(String[] args) {
-        new DistanceVectorRouter();
     }
 
     /* ==================================================================================== */
