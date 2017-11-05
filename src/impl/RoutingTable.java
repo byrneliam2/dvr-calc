@@ -1,9 +1,8 @@
 package impl;
 
 /*
- * NWEN 243 Lab 4
  * Liam Byrne (byrneliam2)
- * 300338518
+ * DVRCalculator
  */
 
 /**

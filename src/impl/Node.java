@@ -3,12 +3,9 @@ package impl;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * NWEN 243 Lab 4
+/*
  * Liam Byrne (byrneliam2)
- * 300338518
- *
- * @author aliahmed (template)
+ * DVRCalculator
  */
 public class Node {
 

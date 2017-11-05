@@ -13,12 +13,9 @@ import java.io.*;
  * in alphabetical order.
  */
 
-/**
- * NWEN 243 Lab 4
+/*
  * Liam Byrne (byrneliam2)
- * 300338518
- *
- * @author aliahmed (GUI base)
+ * DVRCalculator
  */
 public class DistanceVectorRouter {
 
