@@ -8,8 +8,8 @@ import ui.DvrUI;
 public class Launcher {
 
     public static void main(String[] args) {
-        new DistanceVectorRouter();
-        //new DvrUI();
+        //new DistanceVectorRouter();
+        new DvrUI();
     }
 
 }

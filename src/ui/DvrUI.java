@@ -44,8 +44,12 @@ public class DvrUI {
         toolBar.setFloatable(false);
         JButton load = ElementCreator.makeButton("Load");
         JButton run = ElementCreator.makeButton("Run");
+        JButton route = ElementCreator.makeButton("Route");
+        JButton edit = ElementCreator.makeButton("Edit");
         toolBar.add(load);
         toolBar.add(run);
+        toolBar.add(route);
+        toolBar.add(edit);
 
         // graph display
         display = new JPanel();
