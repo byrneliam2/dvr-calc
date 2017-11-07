@@ -3,8 +3,6 @@ package impl;
 import ecs100.*;
 import ui.DvrUI;
 
-import java.awt.Color;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 
@@ -28,9 +26,39 @@ public class DistanceVectorRouter extends Observable {
     private boolean hasBeenLoaded = false;
 
     /**
+     * Load the nodes from the topology file and setup the routing table for each node.
+     */
+    public void onLoad(File file) {
+        // clean up on every load
+        nodes.clear();
+        hasBeenRun = false;
+
+        try {
+            Scanner scan = new Scanner(file);
+            while (scan.hasNext()) {
+                String n = scan.next();
+                int x = scan.nextInt();
+                int y = scan.nextInt();
+                Node node = new Node(n.charAt(0), x, y);
+                int count = scan.nextInt(); // the number of neighbouring nodes
+                for (int i = 0; i < count; i++)
+                    node.addNeighbour(scan.next().charAt(0), scan.nextInt());
+
+                this.nodes.add(node);
+            }
+            for (Node n : nodes) n.setupRoutingTable(nodes);
+            scan.close();
+
+            hasBeenLoaded = true;
+        } catch (IOException | NullPointerException e) {
+            System.out.println("File Failure: " + e); // FIXME
+        }
+    }
+
+    /**
      * Run the distance vector routing algorithm.
      */
-    private void onStart() {
+    public void onRun() {
         if (isError(!hasBeenLoaded, "Please load a topology first.")) return;
 
         Timer.start();
@@ -50,8 +78,8 @@ public class DistanceVectorRouter extends Observable {
         }
         long time = Timer.stop();
 
-        printAll();
-        printTime(time);
+        /*printAll();
+        printTime(time);*/
 
         hasBeenRun = true;
     }
@@ -59,7 +87,7 @@ public class DistanceVectorRouter extends Observable {
     /**
      * Generate a route between two random nodes using the complete routing table.
      */
-    private void onRoute() {
+    public void onRoute() {
         if (isError(!hasBeenRun,
                 "DVR algorithm must be executed\nbefore routing can be performed."))
             return;
@@ -101,128 +129,7 @@ public class DistanceVectorRouter extends Observable {
             }
         }
         currentPath.add(n2);
-        printPath(n1, n2, route[0]);
-    }
-
-    /**
-     * Load the nodes from the topology file and setup the routing table for each node.
-     */
-    public void onLoad() {
-        // clean up on every load
-        nodes.clear();
-        hasBeenRun = false;
-        UI.clearPanes();
-
-        try {
-            Scanner scan = new Scanner(new File(UIFileChooser.open("Select Map File")));
-            while (scan.hasNext()) {
-                String n = scan.next();
-                int x = scan.nextInt();
-                int y = scan.nextInt();
-                Node node = new Node(n.charAt(0), x, y);
-                int count = scan.nextInt(); // the number of neighbouring nodes
-                for (int i = 0; i < count; i++)
-                    node.addNeighbour(scan.next().charAt(0), scan.nextInt());
-
-                this.nodes.add(node);
-            }
-            for (Node n : nodes) n.setupRoutingTable(nodes);
-            scan.close();
-
-            draw();
-            printAll();
-            hasBeenLoaded = true;
-        } catch (IOException | NullPointerException e) {
-            UI.println("File Failure: " + e);
-        }
-    }
-
-    /**
-     * Draw the graph on the screen.
-     */
-    private void draw() {
-        for (Node n : this.nodes) {
-            UI.setColor(Color.BLACK);
-            UI.drawOval(n.getX(), n.getY(), 40, 40);
-            UI.setColor(Color.BLUE);
-            UI.drawString(n.getKey() + "", n.getX() + 5, n.getY() + 22);
-
-            UI.setColor(Color.RED);
-
-            // loop on all neighbours
-            Set<Character> keys = n.getNeighbours().keySet();
-            for (char k : keys) {
-                // Search in the list of nodes for this node wth name "s"
-                Node neighbour = new DVUtils(nodes).find(k);
-                if (neighbour != null) // there is a neighbour
-                {
-                    UI.drawLine(n.getX() + 20, n.getY() + 20,
-                            neighbour.getX() + 20, neighbour.getY() + 20);
-                    UI.drawString(n.getNeighbours().get(k) + "",
-                            n.getX() + ((neighbour.getX() - n.getX())/2),
-                            n.getY() + ((neighbour.getY() - n.getY())/2) + 15);
-                }
-            }
-        }
-    }
-
-    /**
-     * Print the routing table for each node on the screen.
-     */
-    private void printAll() {
-        for (Node node : nodes) {
-            RoutingTable table = node.getTable();
-
-            // print the top neighbour line
-            UI.println("Node " + node.getKey());
-            UI.print("    ");
-            for (int i = 0; i < table.neighbourSize(); i++)
-                UI.print(table.getNeighbourAt(i) + " ");
-            UI.println();
-
-            // print the destination and the link values
-            for (int i = 0; i < table.destinationSize(); i++) {
-
-                // print the destination
-                UI.print(" " + table.getDestinationAt(i) + ": ");
-
-                // print all values from this row of the table
-                int[] row = table.getRow(i);
-                for (int j = 0; j < table.neighbourSize(); j++) {
-                    String str = row[j] + "";
-                    if (row[j] == Integer.MAX_VALUE) str = "/";
-                    UI.print(str + " ");
-                }
-                UI.println();
-            }
-            UI.println();
-        }
-        UI.println("-----------------");
-    }
-
-    /**
-     * Report the time taken to execute the DVR algorithm.
-     */
-    private void printTime(long time) {
-        UI.println("Time: " +
-                new DecimalFormat("#.####").format(time/Math.pow(10, 6))
-                + " milliseconds.");
-    }
-
-    /**
-     * Print the current path stored in the currentPath attribute.
-     * @param n1 node from
-     * @param n2 node to
-     * @param cost table cost
-     */
-    private void printPath(Node n1, Node n2, int cost) {
-        UI.println("From node " + n1.getKey() + " to " + n2.getKey());
-        UI.println("Total cost from table: " + cost);
-        UI.print("Path: ");
-        for (Node n : currentPath) {
-            UI.print(n.getKey() + " ");
-        } UI.println();
-        currentPath.clear();
+        //printPath(n1, n2, route[0]);
     }
 
     /**
@@ -233,6 +140,10 @@ public class DistanceVectorRouter extends Observable {
             UI.println(errorMsg);
             return true;
         } return false;
+    }
+
+    private void updateUI() {
+
     }
 
     /* ==================================================================================== */
@@ -352,11 +263,11 @@ public class DistanceVectorRouter extends Observable {
 
         private static long time;
 
-        public static void start() {
+        static void start() {
             time = System.nanoTime();
         }
 
-        public static long stop() {
+        static long stop() {
             long out = System.nanoTime() - time;
             time = 0;
             return out;

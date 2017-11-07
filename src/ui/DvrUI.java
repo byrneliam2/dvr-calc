@@ -7,10 +7,13 @@ package ui;
 
 import impl.DistanceVectorRouter;
 import impl.Node;
+import impl.RoutingTable;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -58,15 +61,19 @@ public class DvrUI {
      */
     @SuppressWarnings("WeakerAccess")
     void buildMainPanel() {
-        // top tool bar and buttons
+        // top tool bar
         JToolBar toolBar = new JToolBar();
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         toolBar.setFloatable(false);
+
+        // buttons
         JButton load = ElementCreator.makeButton("Load");
         JButton run = ElementCreator.makeButton("Run");
         JButton route = ElementCreator.makeButton("Route");
         JButton edit = ElementCreator.makeButton("Edit");
-        load.addActionListener((e) -> router.onLoad());
+        load.addActionListener((e) -> onLoad());
+        run.addActionListener((e) -> onRun());
+        route.addActionListener((e) -> onRoute());
         toolBar.add(load);
         toolBar.add(run);
         toolBar.add(route);
@@ -99,10 +106,28 @@ public class DvrUI {
         master.add(pane, BorderLayout.CENTER);
     }
 
+    private void onLoad() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+        fileChooser.setApproveButtonText("Load");
+        fileChooser.setDialogTitle("Select a topology to load");
+        if (fileChooser.showOpenDialog(master) == JFileChooser.APPROVE_OPTION) {
+            router.onLoad(fileChooser.getSelectedFile());
+        }
+    }
+
+    private void onRun() {
+        router.onRun();
+    }
+
+    private void onRoute() {
+        router.onRoute();
+    }
+
     /**
      * Draw the graph on the screen.
      */
-    private void draw(List<Node> nodes) {
+    private void onDraw(List<Node> nodes) {
         pane.setTopComponent(new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -132,6 +157,65 @@ public class DvrUI {
             }
         });
     }
+
+    /**
+     * Print the routing table for each node on the screen.
+     */
+    /*private void printAll() {
+        for (Node node : nodes) {
+            RoutingTable table = node.getTable();
+
+            // print the top neighbour line
+            UI.println("Node " + node.getKey());
+            UI.print("    ");
+            for (int i = 0; i < table.neighbourSize(); i++)
+                UI.print(table.getNeighbourAt(i) + " ");
+            UI.println();
+
+            // print the destination and the link values
+            for (int i = 0; i < table.destinationSize(); i++) {
+
+                // print the destination
+                UI.print(" " + table.getDestinationAt(i) + ": ");
+
+                // print all values from this row of the table
+                int[] row = table.getRow(i);
+                for (int j = 0; j < table.neighbourSize(); j++) {
+                    String str = row[j] + "";
+                    if (row[j] == Integer.MAX_VALUE) str = "/";
+                    UI.print(str + " ");
+                }
+                UI.println();
+            }
+            UI.println();
+        }
+        UI.println("-----------------");
+    }
+
+    *//**
+     * Report the time taken to execute the DVR algorithm.
+     *//*
+    private void printTime(long time) {
+        UI.println("Time: " +
+                new DecimalFormat("#.####").format(time/Math.pow(10, 6))
+                + " milliseconds.");
+    }
+
+    *//**
+     * Print the current path stored in the currentPath attribute.
+     * @param n1 node from
+     * @param n2 node to
+     * @param cost table cost
+     *//*
+    private void printPath(Node n1, Node n2, int cost) {
+        UI.println("From node " + n1.getKey() + " to " + n2.getKey());
+        UI.println("Total cost from table: " + cost);
+        UI.print("Path: ");
+        for (Node n : currentPath) {
+            UI.print(n.getKey() + " ");
+        } UI.println();
+        currentPath.clear();
+    }*/
 
     /**
      * Print a message to the screen.
