@@ -1,4 +1,3 @@
-import impl.DistanceVectorRouter;
 import ui.DvrUI;
 
 /*
@@ -8,7 +7,6 @@ import ui.DvrUI;
 public class Launcher {
 
     public static void main(String[] args) {
-        //new DistanceVectorRouter();
         new DvrUI();
     }
 

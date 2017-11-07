@@ -1,6 +1,7 @@
 package impl;
 
 import ecs100.*;
+import ui.DvrUI;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -17,28 +18,14 @@ import java.io.*;
  * Liam Byrne (byrneliam2)
  * DVRCalculator
  */
-public class DistanceVectorRouter {
+public class DistanceVectorRouter extends Observable {
 
     private List<Node> nodes = new ArrayList<>();
     private List<Node> currentPath = new ArrayList<>();
 
     // status checkers
-    private boolean hasBeenRun;
-    private boolean hasBeenLoaded;
-
-    public DistanceVectorRouter() {
-        UI.setDivider(0.25);
-        UI.setWindowSize(1152, 648);
-        UI.getFrame().setTitle("Distance Vector Router");
-        UI.initialise();
-
-        UI.addButton("Load Map", this::onLoad);
-        UI.addButton("", () -> {});
-        UI.addButton("Run", this::onStart).setBackground(Color.GREEN);
-        UI.addButton("Random Route", this::onRoute);
-
-        hasBeenRun = hasBeenLoaded = false;
-    }
+    private boolean hasBeenRun = false;
+    private boolean hasBeenLoaded = false;
 
     /**
      * Run the distance vector routing algorithm.

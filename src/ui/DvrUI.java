@@ -5,6 +5,8 @@ package ui;
  * DVRCalculator
  */
 
+import impl.DistanceVectorRouter;
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
@@ -16,16 +18,18 @@ public class DvrUI {
 
     // Swing components
     private JFrame master;
-    private JSplitPane pane;
     private JPanel display;
-    private JScrollPane scroll;
     private JTextArea text;
+
+    // Other components
+    private DistanceVectorRouter router;
 
     private static final int WIDTH = 1152;
     private static final int HEIGHT = 648;
 
     public DvrUI() {
         master = new JFrame("DVR Calculator");
+        router = new DistanceVectorRouter();
         buildFrame();
     }
 
@@ -56,14 +60,14 @@ public class DvrUI {
         display.setPreferredSize(new Dimension(2*WIDTH/3, HEIGHT));
 
         // side text area
-        scroll = new JScrollPane();
+        JScrollPane scroll = new JScrollPane();
         text = new JTextArea();
         DefaultCaret caret = (DefaultCaret) text.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         scroll.setViewportView(text);
 
         // split pane that holds display and text area
-        pane = new JSplitPane();
+        JSplitPane pane = new JSplitPane();
         pane.setTopComponent(display);
         pane.setBottomComponent(scroll);
 
@@ -72,6 +76,10 @@ public class DvrUI {
 
         master.pack();
         master.setVisible(true);
+    }
+
+    private void addMainPanel() {
+
     }
 
     public void paint() {
@@ -84,5 +92,26 @@ public class DvrUI {
      */
     public void print(String message) {
         text.append(message);
+    }
+
+    /* ============================================================================================================== */
+
+    /**
+     * Helper inner class for the UI.
+     */
+    static class ElementCreator {
+
+        /**
+         * Create a specialised button for the UI.
+         * @param text text to go on the button
+         * @return new JButton
+         */
+        static JButton makeButton(String text) {
+            JButton button = new JButton(text);
+            button.setPreferredSize(new Dimension(135, 35));
+            button.setBackground(Color.WHITE);
+            return button;
+        }
+
     }
 }
