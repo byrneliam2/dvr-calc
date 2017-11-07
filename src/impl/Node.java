@@ -81,19 +81,6 @@ public class Node {
     }
 
     /**
-     * Simulate the addition of a new link by adding the new neighbour and re-initialising
-     * the node. This does not affect the node as greatly as it may seem, since the initialising
-     * process basically sets up the table again (a requirement since we have a new node.)
-     * @param key character key of the node
-     * @param cost cost of the direct link
-     * @param nodes parameter for re-initialising
-     */
-    void simulateNewLink(char key, int cost, List<Node> nodes) {
-        addNeighbour(key, cost);
-        setupRoutingTable(nodes);
-    }
-
-    /**
      * @param key:the neighbour node key
      * @param cost: the cost of the link
      */
@@ -103,19 +90,19 @@ public class Node {
 
     /* =========================================================================================== */
 
-    char getKey() {
+    public char getKey() {
         return key;
     }
 
-    int getX() {
+    public int getX() {
         return x;
     }
 
-    int getY() {
+    public int getY() {
         return y;
     }
 
-    HashMap<Character, Integer> getNeighbours() {
+    public HashMap<Character, Integer> getNeighbours() {
         return neighbours;
     }
 

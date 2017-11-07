@@ -107,7 +107,7 @@ public class DistanceVectorRouter extends Observable {
     /**
      * Load the nodes from the topology file and setup the routing table for each node.
      */
-    private void onLoad() {
+    public void onLoad() {
         // clean up on every load
         nodes.clear();
         hasBeenRun = false;

@@ -6,10 +6,13 @@ package ui;
  */
 
 import impl.DistanceVectorRouter;
+import impl.Node;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Primary hosting class for the UI component set.
@@ -18,7 +21,7 @@ public class DvrUI {
 
     // Swing components
     private JFrame master;
-    private JPanel display;
+    private JSplitPane pane;
     private JTextArea text;
 
     // Other components
@@ -42,6 +45,19 @@ public class DvrUI {
         master.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         master.setResizable(false);
 
+        buildMainPanel();
+
+        master.pack();
+        master.setVisible(true);
+    }
+
+    /**
+     * Build the main panel that fills the rest of the frame. This method is purposely
+     * package private so that other UI elements can extend this class and override this
+     * method to add its own components.
+     */
+    @SuppressWarnings("WeakerAccess")
+    void buildMainPanel() {
         // top tool bar and buttons
         JToolBar toolBar = new JToolBar();
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -50,14 +66,22 @@ public class DvrUI {
         JButton run = ElementCreator.makeButton("Run");
         JButton route = ElementCreator.makeButton("Route");
         JButton edit = ElementCreator.makeButton("Edit");
+        load.addActionListener((e) -> router.onLoad());
         toolBar.add(load);
         toolBar.add(run);
         toolBar.add(route);
         toolBar.add(edit);
 
-        // graph display
-        display = new JPanel();
-        display.setPreferredSize(new Dimension(2*WIDTH/3, HEIGHT));
+        // initial display on the graph side
+        JPanel initial = new JPanel();
+        JLabel begin = new JLabel();
+        initial.setPreferredSize(new Dimension(2*WIDTH/3, HEIGHT));
+        initial.setLayout(new BorderLayout());
+        begin.setFont(new Font("Arial", Font.BOLD, 36));
+        begin.setText("Please load a topology.");
+        begin.setForeground(Color.LIGHT_GRAY);
+        begin.setHorizontalAlignment(SwingConstants.CENTER);
+        initial.add(begin, BorderLayout.CENTER);
 
         // side text area
         JScrollPane scroll = new JScrollPane();
@@ -67,23 +91,46 @@ public class DvrUI {
         scroll.setViewportView(text);
 
         // split pane that holds display and text area
-        JSplitPane pane = new JSplitPane();
-        pane.setTopComponent(display);
+        pane = new JSplitPane();
+        pane.setTopComponent(initial);
         pane.setBottomComponent(scroll);
 
         master.add(toolBar, BorderLayout.NORTH);
         master.add(pane, BorderLayout.CENTER);
-
-        master.pack();
-        master.setVisible(true);
     }
 
-    private void addMainPanel() {
+    /**
+     * Draw the graph on the screen.
+     */
+    private void draw(List<Node> nodes) {
+        pane.setTopComponent(new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                for (Node n : nodes) {
+                    g.setColor(Color.BLACK);
+                    g.drawOval(n.getX(), n.getY(), 40, 40);
+                    g.setColor(Color.BLUE);
+                    g.drawString(n.getKey() + "", n.getX() + 5, n.getY() + 22);
 
-    }
+                    g.setColor(Color.RED);
 
-    public void paint() {
-
+                    // loop on all neighbours
+                    Set<Character> keys = n.getNeighbours().keySet();
+                    for (char k : keys) {
+                        // Search in the list of nodes for this node wth name "s"
+                        Node neighbour = new DistanceVectorRouter.DVUtils(nodes).find(k);
+                        if (neighbour != null) // there is a neighbour
+                        {
+                            g.drawLine(n.getX() + 20, n.getY() + 20,
+                                    neighbour.getX() + 20, neighbour.getY() + 20);
+                            g.drawString(n.getNeighbours().get(k) + "",
+                                    n.getX() + ((neighbour.getX() - n.getX())/2),
+                                    n.getY() + ((neighbour.getY() - n.getY())/2) + 15);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
