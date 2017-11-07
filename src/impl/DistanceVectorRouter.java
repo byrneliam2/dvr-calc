@@ -1,7 +1,8 @@
 package impl;
 
 import ecs100.*;
-import ui.DvrUI;
+import ui.DvrUIListener;
+import ui.DvrUINotifier;
 
 import java.util.*;
 import java.io.*;
@@ -16,7 +17,7 @@ import java.io.*;
  * Liam Byrne (byrneliam2)
  * DVRCalculator
  */
-public class DistanceVectorRouter extends Observable {
+public class DistanceVectorRouter extends DvrUINotifier {
 
     private List<Node> nodes = new ArrayList<>();
     private List<Node> currentPath = new ArrayList<>();
@@ -24,6 +25,11 @@ public class DistanceVectorRouter extends Observable {
     // status checkers
     private boolean hasBeenRun = false;
     private boolean hasBeenLoaded = false;
+
+    public DistanceVectorRouter(DvrUIListener... listeners) {
+        super();
+        for (DvrUIListener l : listeners) addListener(l);
+    }
 
     /**
      * Load the nodes from the topology file and setup the routing table for each node.
@@ -150,8 +156,8 @@ public class DistanceVectorRouter extends Observable {
         return currentPath;
     }
 
-    private void updateUI() {
-
+    private void sendToListeners(Object... args) {
+        updateListeners(this, args);
     }
 
     /* ==================================================================================== */

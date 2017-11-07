@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * Primary hosting class for the UI component set.
  */
-public class DvrUI {
+public class DvrUI implements DvrUIListener {
 
     // Swing components
     private JFrame master;
@@ -35,7 +35,7 @@ public class DvrUI {
 
     public DvrUI() {
         master = new JFrame("DVR Calculator");
-        router = new DistanceVectorRouter();
+        router = new DistanceVectorRouter(this);
         buildFrame();
     }
 
@@ -224,6 +224,11 @@ public class DvrUI {
      */
     public void print(String message) {
         text.append(message);
+    }
+
+    @Override
+    public void update(DvrUINotifier notifier, Object... args) {
+        //
     }
 
     /* ============================================================================================================== */
