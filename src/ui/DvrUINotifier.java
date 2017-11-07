@@ -16,11 +16,11 @@ public abstract class DvrUINotifier {
         this.listeners = new ArrayList<>();
     }
 
-    protected synchronized void addListener(DvrUIListener l) {
+    protected void addListener(DvrUIListener l) {
         listeners.add(l);
     }
 
-    protected synchronized void updateListeners(DvrUINotifier notifier, Object... args) {
+    protected void updateListeners(DvrUINotifier notifier, Object... args) {
         for (DvrUIListener l : listeners)
             l.update(notifier, args);
     }
