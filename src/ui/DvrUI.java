@@ -228,7 +228,9 @@ public class DvrUI implements DvrUIListener {
 
     @Override
     public void update(DvrUINotifier notifier, Object... args) {
-        //
+        for (Object o : args) {
+            print(o + "\n");
+        }
     }
 
     /* ============================================================================================================== */

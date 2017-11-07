@@ -1,6 +1,5 @@
 package impl;
 
-import ecs100.*;
 import ui.DvrUIListener;
 import ui.DvrUINotifier;
 
@@ -95,7 +94,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
      */
     public void onRoute() {
         if (isError(!hasBeenRun,
-                "DVR algorithm must be executed\nbefore routing can be performed."))
+                "DVR algorithm must be executed before routing can be performed."))
             return;
 
         // get two random nodes
@@ -143,7 +142,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
      */
     private boolean isError(boolean condition, String errorMsg) {
         if (condition) {
-            UI.println(errorMsg);
+            sendToListeners(errorMsg);
             return true;
         } return false;
     }
