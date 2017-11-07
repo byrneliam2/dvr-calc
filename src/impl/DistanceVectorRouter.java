@@ -142,6 +142,14 @@ public class DistanceVectorRouter extends Observable {
         } return false;
     }
 
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public List<Node> getCurrentPath() {
+        return currentPath;
+    }
+
     private void updateUI() {
 
     }

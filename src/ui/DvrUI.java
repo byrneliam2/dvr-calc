@@ -113,6 +113,7 @@ public class DvrUI {
         fileChooser.setDialogTitle("Select a topology to load");
         if (fileChooser.showOpenDialog(master) == JFileChooser.APPROVE_OPTION) {
             router.onLoad(fileChooser.getSelectedFile());
+            onDraw(router.getNodes());
         }
     }
 
