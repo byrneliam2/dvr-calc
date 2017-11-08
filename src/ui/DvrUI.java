@@ -130,16 +130,23 @@ public class DvrUI implements DvrUIListener {
      */
     private void onDraw(List<Node> nodes) {
         pane.setTopComponent(new JPanel() {
+
             @Override
             protected void paintComponent(Graphics g) {
+
+                // setup graphics object
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(
+                        RenderingHints.KEY_TEXT_ANTIALIASING,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                g2.setFont(new Font("Arial", Font.BOLD, 14));
+
                 for (Node n : nodes) {
-                    g.setColor(Color.BLACK);
-                    g.drawOval(n.getX(), n.getY(), 40, 40);
-                    g.setColor(Color.BLUE);
-                    g.drawString(n.getKey() + "", n.getX() + 5, n.getY() + 22);
-
-                    g.setColor(Color.RED);
-
+                    // draw all links first
+                    g2.setColor(Color.BLACK);
                     // loop on all neighbours
                     Set<Character> keys = n.getNeighbours().keySet();
                     for (char k : keys) {
@@ -147,13 +154,22 @@ public class DvrUI implements DvrUIListener {
                         Node neighbour = new DistanceVectorRouter.DVUtils(nodes).find(k);
                         if (neighbour != null) // there is a neighbour
                         {
-                            g.drawLine(n.getX() + 20, n.getY() + 20,
+                            g2.drawLine(n.getX() + 20, n.getY() + 20,
                                     neighbour.getX() + 20, neighbour.getY() + 20);
-                            g.drawString(n.getNeighbours().get(k) + "",
+                            g2.drawString(n.getNeighbours().get(k) + "",
                                     n.getX() + ((neighbour.getX() - n.getX())/2),
                                     n.getY() + ((neighbour.getY() - n.getY())/2) + 15);
                         }
                     }
+                }
+
+                for (Node n : nodes) {
+                    // draw nodes over top
+                    g2.setColor(Color.WHITE);
+                    g2.fillOval(n.getX(), n.getY(), 40, 40);
+                    g2.setColor(Color.BLACK);
+                    g2.drawOval(n.getX(), n.getY(), 40, 40);
+                    g2.drawString(n.getKey() + "", n.getX() + 15, n.getY() + 25);
                 }
             }
         });
