@@ -7,13 +7,11 @@ package ui;
 
 import impl.DistanceVectorRouter;
 import impl.Node;
-import impl.RoutingTable;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -166,10 +164,11 @@ public class DvrUI implements DvrUIListener {
                 for (Node n : nodes) {
                     // draw nodes over top
                     g2.setColor(Color.WHITE);
-                    g2.fillOval(n.getX(), n.getY(), 40, 40);
+                    g2.fillOval(n.getX(), n.getY(), Node.BOUNDS, Node.BOUNDS);
                     g2.setColor(Color.BLACK);
-                    g2.drawOval(n.getX(), n.getY(), 40, 40);
-                    g2.drawString(n.getKey() + "", n.getX() + 15, n.getY() + 25);
+                    g2.drawOval(n.getX(), n.getY(), Node.BOUNDS, Node.BOUNDS);
+                    g2.drawString(n.getKey() + "", n.getX() + Node.BOUNDS/2 - g.getFont().getSize()/4,
+                            n.getY() + Node.BOUNDS/2 + g.getFont().getSize()/4);
                 }
             }
         });

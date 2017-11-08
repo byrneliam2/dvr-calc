@@ -14,6 +14,8 @@ public class Node {
     private HashMap<Character, Integer> neighbours;    // the list of neighbours
     private RoutingTable table;
 
+    public static final int BOUNDS = 40;
+
     /**
      * @param n: the node key
      * @param xp: the x position
