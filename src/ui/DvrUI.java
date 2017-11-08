@@ -11,6 +11,8 @@ import impl.Node;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
@@ -65,12 +67,25 @@ public class DvrUI implements DvrUIListener {
         toolBar.setFloatable(false);
 
         // buttons
-        JButton load = ElementCreator.makeButton("Load");
-        JButton run = ElementCreator.makeButton("Run");
-        JButton route = ElementCreator.makeButton("Route");
-        JButton edit = ElementCreator.makeButton("Edit");
-        load.addActionListener((e) -> onLoad());
-        run.addActionListener((e) -> onRun());
+        JButton load = ElementUtilities.makeButton("Load");
+        JButton run = ElementUtilities.makeButton("Run");
+        JButton route = ElementUtilities.makeButton("Route");
+        JButton edit = ElementUtilities.makeButton("Edit");
+
+        Timer tload = ElementUtilities.giveFlashingAnimation(load, Color.GREEN);
+        Timer trun = ElementUtilities.giveFlashingAnimation(run, Color.GREEN);
+        tload.start();
+        load.addActionListener((e) -> {
+            tload.stop();
+            ElementUtilities.returnToDefaultColour(load);
+            onLoad();
+            trun.start();
+        });
+        run.addActionListener((e) -> {
+            trun.stop();
+            ElementUtilities.returnToDefaultColour(run);
+            onRun();
+        });
         route.addActionListener((e) -> onRoute());
         toolBar.add(load);
         toolBar.add(run);
@@ -148,6 +163,7 @@ public class DvrUI implements DvrUIListener {
                     // loop on all neighbours
                     Set<Character> keys = n.getNeighbours().keySet();
                     for (char k : keys) {
+                        // TODO make links only draw once
                         // Search in the list of nodes for this node wth name "s"
                         Node neighbour = new DistanceVectorRouter.DVUtils(nodes).find(k);
                         if (neighbour != null) // there is a neighbour
@@ -253,7 +269,9 @@ public class DvrUI implements DvrUIListener {
     /**
      * Helper inner class for the UI.
      */
-    static class ElementCreator {
+    static class ElementUtilities {
+
+        private static final Color BUTTON_DEFAULT = Color.WHITE;
 
         /**
          * Create a specialised button for the UI.
@@ -263,8 +281,35 @@ public class DvrUI implements DvrUIListener {
         static JButton makeButton(String text) {
             JButton button = new JButton(text);
             button.setPreferredSize(new Dimension(135, 35));
-            button.setBackground(Color.WHITE);
+            button.setBackground(BUTTON_DEFAULT);
             return button;
+        }
+
+        /**
+         * Give a component a flashing animation that changes every second.
+         * @param j component
+         * @return new Swing timer
+         */
+        static Timer giveFlashingAnimation(JComponent j, Color col) {
+            return new Timer(1000, new ActionListener() {
+                boolean flash = true;
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (flash)
+                        j.setBackground(col);
+                    else j.setBackground(BUTTON_DEFAULT);
+                    flash = !flash;
+                }
+            });
+        }
+
+        /**
+         * Reset a component's colour to default.
+         * @param j component
+         */
+        static void returnToDefaultColour(JComponent j) {
+            j.setBackground(BUTTON_DEFAULT);
         }
 
     }
