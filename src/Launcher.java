@@ -1,4 +1,4 @@
-import ui.DvrUI;
+import com.byrneliam2.calc.ui.DvrUI;
 
 /*
  * Liam Byrne (byrneliam2)

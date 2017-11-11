@@ -1,4 +1,4 @@
-package impl;
+package com.byrneliam2.calc.impl;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package tests;
+package com.byrneliam2.calc.impl;
 
 /*
  * Liam Byrne (byrneliam2)

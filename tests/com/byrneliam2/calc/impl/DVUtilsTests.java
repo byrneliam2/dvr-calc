@@ -1,12 +1,10 @@
-package tests;
+package com.byrneliam2.calc.impl;
 
 /*
  * Liam Byrne (byrneliam2)
  * DVRCalculator
  */
 
-import impl.DistanceVectorRouter;
-import impl.Node;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
