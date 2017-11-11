@@ -9,13 +9,11 @@ import com.byrneliam2.dvrcalc.impl.DistanceVectorRouter;
 import com.byrneliam2.dvrcalc.impl.Node;
 
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Primary hosting class for the UI component set.
@@ -24,7 +22,7 @@ public class DvrUI implements DvrUIListener {
 
     // Swing components
     private JFrame master;
-    private JSplitPane pane;
+    private JPanel display;
     private JTextArea text;
 
     // Other components
@@ -46,7 +44,7 @@ public class DvrUI implements DvrUIListener {
         master.setIconImage(new ImageIcon("res/github.png").getImage());
         master.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         master.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        master.setResizable(false);
+        //master.setResizable(false);
 
         buildMainPanel();
 
@@ -65,12 +63,43 @@ public class DvrUI implements DvrUIListener {
         JToolBar toolBar = new JToolBar();
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         toolBar.setFloatable(false);
+        buildToolBar(toolBar);
 
-        // buttons
-        JButton load = ElementUtilities.giveButton("Load");
-        JButton run = ElementUtilities.giveButton("Run");
-        JButton route = ElementUtilities.giveButton("Route");
-        JButton edit = ElementUtilities.giveButton("Graph Editor");
+        // initial display on the graph side
+        JPanel initial = new JPanel();
+        JLabel begin = new JLabel();
+        initial.setPreferredSize(new Dimension(2*WIDTH/3, HEIGHT));
+        initial.setLayout(new BorderLayout());
+        begin.setFont(new Font("Arial", Font.BOLD, 36));
+        begin.setText("Please load a topology.");
+        begin.setForeground(Color.LIGHT_GRAY);
+        begin.setHorizontalAlignment(SwingConstants.CENTER);
+        initial.add(begin, BorderLayout.CENTER);
+
+        /*// side text area
+        JScrollPane scroll = new JScrollPane();
+        text = new JTextArea();
+        DefaultCaret caret = (DefaultCaret) text.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        scroll.setViewportView(text);*/
+
+        display = new JPanel();
+        display.add(initial, BorderLayout.CENTER);
+
+        master.add(toolBar, BorderLayout.NORTH);
+        master.add(display, BorderLayout.CENTER);
+    }
+
+    /**
+     * Build the tool bar at the top of the frame. This is mostly adding buttons and binding
+     * animation timers to them.
+     * @param toolBar tool bar to build
+     */
+    private void buildToolBar(JToolBar toolBar) {
+        JButton load = ElementUtilities.giveButton("Load", ElementUtilities.BUTTON_DEFAULT);
+        JButton run = ElementUtilities.giveButton("Run", ElementUtilities.BUTTON_DEFAULT);
+        JButton route = ElementUtilities.giveButton("Route", ElementUtilities.BUTTON_DEFAULT);
+        JButton edit = ElementUtilities.giveButton("Graph Editor", ElementUtilities.BUTTON_SECONDARY);
 
         Timer tload = ElementUtilities.giveFlashingAnimation(load, Color.GREEN);
         Timer trun = ElementUtilities.giveFlashingAnimation(run, Color.GREEN);
@@ -91,32 +120,6 @@ public class DvrUI implements DvrUIListener {
         toolBar.add(run);
         toolBar.add(route);
         toolBar.add(edit);
-
-        // initial display on the graph side
-        JPanel initial = new JPanel();
-        JLabel begin = new JLabel();
-        initial.setPreferredSize(new Dimension(2*WIDTH/3, HEIGHT));
-        initial.setLayout(new BorderLayout());
-        begin.setFont(new Font("Arial", Font.BOLD, 36));
-        begin.setText("Please load a topology.");
-        begin.setForeground(Color.LIGHT_GRAY);
-        begin.setHorizontalAlignment(SwingConstants.CENTER);
-        initial.add(begin, BorderLayout.CENTER);
-
-        // side text area
-        JScrollPane scroll = new JScrollPane();
-        text = new JTextArea();
-        DefaultCaret caret = (DefaultCaret) text.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        scroll.setViewportView(text);
-
-        // split pane that holds display and text area
-        pane = new JSplitPane();
-        pane.setTopComponent(initial);
-        pane.setBottomComponent(scroll);
-
-        master.add(toolBar, BorderLayout.NORTH);
-        master.add(pane, BorderLayout.CENTER);
     }
 
     private void onLoad() {
@@ -142,52 +145,10 @@ public class DvrUI implements DvrUIListener {
      * Draw the graph on the screen.
      */
     private void onDraw(List<Node> nodes) {
-        pane.setTopComponent(new JPanel() {
-
-            @Override
-            protected void paintComponent(Graphics g) {
-
-                // setup graphics object
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(
-                        RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setRenderingHint(
-                        RenderingHints.KEY_TEXT_ANTIALIASING,
-                        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-                g2.setFont(new Font("Arial", Font.BOLD, 14));
-
-                for (Node n : nodes) {
-                    // draw all links first
-                    g2.setColor(Color.BLACK);
-                    // loop on all neighbours
-                    Set<Character> keys = n.getNeighbours().keySet();
-                    for (char k : keys) {
-                        // TODO make links only draw once
-                        // Search in the list of nodes for this node wth name "s"
-                        Node neighbour = new DistanceVectorRouter.DVUtils(nodes).find(k);
-                        if (neighbour != null) // there is a neighbour
-                        {
-                            g2.drawLine(n.getX() + 20, n.getY() + 20,
-                                    neighbour.getX() + 20, neighbour.getY() + 20);
-                            g2.drawString(n.getNeighbours().get(k) + "",
-                                    n.getX() + ((neighbour.getX() - n.getX())/2),
-                                    n.getY() + ((neighbour.getY() - n.getY())/2) + 15);
-                        }
-                    }
-                }
-
-                for (Node n : nodes) {
-                    // draw nodes over top
-                    g2.setColor(Color.WHITE);
-                    g2.fillOval(n.getX(), n.getY(), Node.BOUNDS, Node.BOUNDS);
-                    g2.setColor(Color.BLACK);
-                    g2.drawOval(n.getX(), n.getY(), Node.BOUNDS, Node.BOUNDS);
-                    g2.drawString(n.getKey() + "", n.getX() + Node.BOUNDS/2 - g.getFont().getSize()/4,
-                            n.getY() + Node.BOUNDS/2 + g.getFont().getSize()/4);
-                }
-            }
-        });
+        display.removeAll();
+        display.add(new DvrPanel(nodes), BorderLayout.CENTER);
+        display.revalidate();
+        display.repaint();
     }
 
     /**
@@ -253,7 +214,7 @@ public class DvrUI implements DvrUIListener {
      * Print a message to the screen.
      * @param message string message
      */
-    public void print(String message) {
+    private void print(String message) {
         text.append(message);
     }
 
@@ -272,16 +233,17 @@ public class DvrUI implements DvrUIListener {
     static class ElementUtilities {
 
         private static final Color BUTTON_DEFAULT = Color.WHITE;
+        private static final Color BUTTON_SECONDARY = Color.LIGHT_GRAY;
 
         /**
          * Create a specialised button for the UI.
          * @param text text to go on the button
          * @return new JButton
          */
-        static JButton giveButton(String text) {
+        static JButton giveButton(String text, Color col) {
             JButton button = new JButton(text);
             button.setPreferredSize(new Dimension(135, 35));
-            button.setBackground(BUTTON_DEFAULT);
+            button.setBackground(col);
             return button;
         }
 
@@ -311,6 +273,5 @@ public class DvrUI implements DvrUIListener {
         static void returnToDefaultColour(JComponent j) {
             j.setBackground(BUTTON_DEFAULT);
         }
-
     }
 }

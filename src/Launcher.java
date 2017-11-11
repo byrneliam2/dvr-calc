@@ -1,5 +1,7 @@
 import com.byrneliam2.dvrcalc.ui.DvrUI;
 
+import javax.swing.*;
+
 /*
  * Liam Byrne (byrneliam2)
  * DVRCalculator
@@ -7,7 +9,7 @@ import com.byrneliam2.dvrcalc.ui.DvrUI;
 public class Launcher {
 
     public static void main(String[] args) {
-        new DvrUI();
+        SwingUtilities.invokeLater(DvrUI::new);
     }
 
 }
