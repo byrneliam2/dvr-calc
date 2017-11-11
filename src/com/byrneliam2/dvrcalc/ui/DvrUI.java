@@ -106,6 +106,7 @@ public class DvrUI implements DvrUIListener {
         tload.start();
         load.addActionListener((e) -> {
             tload.stop();
+            trun.stop();
             ElementUtilities.returnToDefaultColour(load);
             onLoad();
             trun.start();
@@ -216,6 +217,10 @@ public class DvrUI implements DvrUIListener {
      */
     private void print(String message) {
         text.append(message);
+    }
+
+    public Rectangle getFrameBounds() {
+        return master.getBounds();
     }
 
     @Override

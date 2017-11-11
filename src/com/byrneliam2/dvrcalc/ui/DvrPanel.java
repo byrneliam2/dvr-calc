@@ -23,6 +23,8 @@ public class DvrPanel extends JPanel {
     DvrPanel(List<Node> nodes) {
         super();
         this.nodes = nodes;
+
+        //this.setBackground(Color.WHITE);
     }
 
     @Override
