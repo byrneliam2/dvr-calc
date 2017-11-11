@@ -69,4 +69,9 @@ public class DvrPanel extends JPanel {
                     n.getY() + Node.BOUNDS/2 + g.getFont().getSize()/4);
         }
     }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(DvrUI.WIDTH, DvrUI.HEIGHT);
+    }
 }

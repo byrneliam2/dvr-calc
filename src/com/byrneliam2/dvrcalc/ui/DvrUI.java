@@ -28,8 +28,8 @@ public class DvrUI implements DvrUIListener {
     // Other components
     private DistanceVectorRouter router;
 
-    private static final int WIDTH = 1152;
-    private static final int HEIGHT = 648;
+    static final int WIDTH = 1152;
+    static final int HEIGHT = 648;
 
     public DvrUI() {
         master = new JFrame("DVR Calculator");
