@@ -1,8 +1,7 @@
-package com.byrneliam2.calc.impl;
+package com.byrneliam2.dvrcalc.impl;
 
-import com.byrneliam2.calc.impl.Node;
-import com.byrneliam2.calc.ui.DvrUIListener;
-import com.byrneliam2.calc.ui.DvrUINotifier;
+import com.byrneliam2.dvrcalc.ui.DvrUIListener;
+import com.byrneliam2.dvrcalc.ui.DvrUINotifier;
 
 import java.util.*;
 import java.io.*;

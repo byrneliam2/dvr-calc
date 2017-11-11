@@ -1,4 +1,4 @@
-package com.byrneliam2.calc.ui;
+package com.byrneliam2.dvrcalc.ui;
 
 /*
  * Liam Byrne (byrneliam2)

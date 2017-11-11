@@ -1,13 +1,12 @@
-package com.byrneliam2.calc.ui;
+package com.byrneliam2.dvrcalc.ui;
 
 /*
  * Liam Byrne (byrneliam2)
  * DVRCalculator
  */
 
-import com.byrneliam2.calc.impl.DistanceVectorRouter;
-import com.byrneliam2.calc.impl.Node;
-import com.byrneliam2.calc.ui.DvrUIListener;
+import com.byrneliam2.dvrcalc.impl.DistanceVectorRouter;
+import com.byrneliam2.dvrcalc.impl.Node;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;

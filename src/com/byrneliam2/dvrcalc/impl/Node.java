@@ -1,4 +1,4 @@
-package com.byrneliam2.calc.impl;
+package com.byrneliam2.dvrcalc.impl;
 
 import java.util.*;
 import java.util.stream.Collectors;
