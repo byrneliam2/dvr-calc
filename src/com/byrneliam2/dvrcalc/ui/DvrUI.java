@@ -5,6 +5,8 @@ package com.byrneliam2.dvrcalc.ui;
  * DVRCalculator
  */
 
+import com.byrneliam2.dvrcalc.common.UIConstants;
+import com.byrneliam2.dvrcalc.editor.DvrEditor;
 import com.byrneliam2.dvrcalc.impl.DistanceVectorRouter;
 import com.byrneliam2.dvrcalc.impl.Node;
 
@@ -21,29 +23,27 @@ import java.util.List;
 public class DvrUI implements DvrUIListener {
 
     // Swing components
-    private JFrame master;
-    private JPanel display;
+    protected JFrame master;
+    protected JPanel display;
     private JTextArea text;
 
     // Other components
     private DistanceVectorRouter router;
 
-    static final int WIDTH = 1152;
-    static final int HEIGHT = 648;
-
-    public DvrUI() {
-        master = new JFrame("DVR Calculator");
+    public DvrUI(String title, boolean terminates) {
+        master = new JFrame(title);
         router = new DistanceVectorRouter(this);
-        buildFrame();
+        buildFrame(terminates);
     }
 
     /**
      * Build the master frame on setup.
+     * @param terminate signals whether to terminate the program with the close button or not
      */
-    private void buildFrame() {
-        master.setIconImage(new ImageIcon("res/github.png").getImage());
-        master.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        master.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    protected void buildFrame(boolean terminate) {
+        master.setIconImage(new ImageIcon("resources/github.png").getImage());
+        master.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
+        master.setDefaultCloseOperation(terminate ? WindowConstants.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
         //master.setResizable(false);
 
         buildMainPanel();
@@ -54,21 +54,18 @@ public class DvrUI implements DvrUIListener {
 
     /**
      * Build the main panel that fills the rest of the frame. This method is purposely
-     * package private so that other UI elements can extend this class and override this
+     * open so that other UI elements can extend this class and override this
      * method to add its own components.
      */
-    @SuppressWarnings("WeakerAccess")
-    void buildMainPanel() {
+    protected void buildMainPanel() {
         // top tool bar
         JToolBar toolBar = new JToolBar();
-        toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-        toolBar.setFloatable(false);
         buildToolBar(toolBar);
 
         // initial display on the graph side
         JPanel initial = new JPanel();
         JLabel begin = new JLabel();
-        initial.setPreferredSize(new Dimension(2*WIDTH/3, HEIGHT));
+        initial.setPreferredSize(new Dimension(2*UIConstants.WIDTH.getValue()/3, UIConstants.HEIGHT.getValue()));
         initial.setLayout(new BorderLayout());
         begin.setFont(new Font("Arial", Font.BOLD, 36));
         begin.setText("Please load a topology.");
@@ -95,7 +92,10 @@ public class DvrUI implements DvrUIListener {
      * animation timers to them.
      * @param toolBar tool bar to build
      */
-    private void buildToolBar(JToolBar toolBar) {
+    protected void buildToolBar(JToolBar toolBar) {
+        toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        toolBar.setFloatable(false);
+
         JButton load = ElementUtilities.giveButton("Load", ElementUtilities.BUTTON_DEFAULT);
         JButton run = ElementUtilities.giveButton("Run", ElementUtilities.BUTTON_DEFAULT);
         JButton route = ElementUtilities.giveButton("Route", ElementUtilities.BUTTON_DEFAULT);
@@ -117,6 +117,7 @@ public class DvrUI implements DvrUIListener {
             onRun();
         });
         route.addActionListener((e) -> onRoute());
+        edit.addActionListener((e) -> new DvrEditor());
         toolBar.add(load);
         toolBar.add(run);
         toolBar.add(route);

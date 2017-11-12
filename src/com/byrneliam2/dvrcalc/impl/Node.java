@@ -16,12 +16,7 @@ public class Node {
 
     public static final int BOUNDS = 40;
 
-    /**
-     * @param n: the node key
-     * @param xp: the x position
-     * @param yp: the y position
-     */
-    public Node(char n, int xp, int yp) {
+    Node(char n, int xp, int yp) {
         this.key = n;
         this.x = xp;
         this.y = yp;
@@ -82,11 +77,7 @@ public class Node {
         }
     }
 
-    /**
-     * @param key:the neighbour node key
-     * @param cost: the cost of the link
-     */
-    public void addNeighbour(char key, int cost) {
+    void addNeighbour(char key, int cost) {
         this.neighbours.put(key, cost);
     }
 

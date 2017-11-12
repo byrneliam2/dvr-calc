@@ -9,7 +9,7 @@ package com.byrneliam2.dvrcalc.impl;
  * Represents a routing table with a 2D array. Rows are added
  * and returned through operations.
  */
-public class RoutingTable {
+class RoutingTable {
 
     /*
      * Table is represented with neighbours across the top
@@ -21,7 +21,7 @@ public class RoutingTable {
     private char[] destinations;
     private int count = 0;
 
-    public RoutingTable(int numDestinations, int numNeighbours) {
+    RoutingTable(int numDestinations, int numNeighbours) {
         this.table = new int[numDestinations][numNeighbours];
         this.destinations = new char[numDestinations];
         this.neighbours = new char[numNeighbours];
@@ -32,7 +32,7 @@ public class RoutingTable {
      * positions in the respective arrays.
      */
 
-    public int getDestinationIndex(char k) {
+    int getDestinationIndex(char k) {
         for (int i = 0; i < destinations.length; i++) {
             if (destinations[i] == k)
                 return i;
@@ -40,7 +40,7 @@ public class RoutingTable {
         return -1;
     }
 
-    public int getNeighbourIndex(char k) {
+    int getNeighbourIndex(char k) {
         for (int i = 0; i < neighbours.length; i++) {
             if (neighbours[i] == k)
                 return i;
@@ -48,33 +48,33 @@ public class RoutingTable {
         return -1;
     }
 
-    public char getDestinationAt(int i) {
+    char getDestinationAt(int i) {
         return destinations[i];
     }
 
-    public char getNeighbourAt(int i) {
+    char getNeighbourAt(int i) {
         return neighbours[i];
     }
 
     /* ========================== GETTERS and SETTERS ============================= */
 
-    public void setDestinations(char[] ds) {
+    void setDestinations(char[] ds) {
         destinations = ds;
     }
 
-    public void setNeighbours(char[] neighbours) {
+    void setNeighbours(char[] neighbours) {
         this.neighbours = neighbours;
     }
 
-    public void addRow(int[] row) {
+    void addRow(int[] row) {
         table[count++] = row;
     }
 
-    public int[] getRow(int number) {
+    int[] getRow(int number) {
         return table[number];
     }
 
-    public int getValue(int row, int col) {
+    int getValue(int row, int col) {
         return table[row][col];
     }
 
@@ -87,8 +87,7 @@ public class RoutingTable {
      * there is an error, meaning the cell represented by dest and via is not overwritten.
      */
 
-    @SuppressWarnings("WeakerAccess")
-    public int getValueAt(char dest, char via) {
+    int getValueAt(char dest, char via) {
         int d = getDestinationIndex(dest);
         int n = getNeighbourIndex(via);
         if (d == -1) return d;
@@ -96,7 +95,7 @@ public class RoutingTable {
         return table[d][n];
     }
 
-    public void setValueAt(char dest, char via, int num) {
+    void setValueAt(char dest, char via, int num) {
         // safeguard
         if (num == -1) return;
         // carry on like in getValueAt
@@ -109,11 +108,11 @@ public class RoutingTable {
 
     /* ========================== ATTRIBUTE GETTERS ============================== */
 
-    public int destinationSize() {
+    int destinationSize() {
         return table.length;
     }
 
-    public int neighbourSize() {
+    int neighbourSize() {
         return table[0].length;
     }
 }

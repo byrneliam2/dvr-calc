@@ -5,6 +5,7 @@ package com.byrneliam2.dvrcalc.ui;
  * DVRCalculator
  */
 
+import com.byrneliam2.dvrcalc.common.UIConstants;
 import com.byrneliam2.dvrcalc.impl.DistanceVectorRouter;
 import com.byrneliam2.dvrcalc.impl.Node;
 
@@ -74,6 +75,6 @@ public class DvrPanel extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(DvrUI.WIDTH, DvrUI.HEIGHT);
+        return new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue());
     }
 }
