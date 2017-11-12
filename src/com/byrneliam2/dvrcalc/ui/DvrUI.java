@@ -24,32 +24,38 @@ public class DvrUI implements DvrUIListener {
 
     // Swing components
     protected JFrame master;
+    private JToolBar toolBar;
     protected JPanel display;
-    private JTextArea text;
 
     // Other components
     private DistanceVectorRouter router;
+    private boolean terminates;
 
     public DvrUI(String title, boolean terminates) {
-        master = new JFrame(title);
-        router = new DistanceVectorRouter(this);
-        buildFrame(terminates);
+        this.master = new JFrame(title);
+        this.toolBar = new JToolBar();
+        display = new JPanel();
+        this.router = new DistanceVectorRouter(this);
+        this.terminates = terminates;
+
+        onBuild();
+    }
+
+    protected void onBuild() {
+        buildFrame();
+        buildToolBar();
+        buildMainPanel();
+        finishBuild();
     }
 
     /**
      * Build the master frame on setup.
-     * @param terminate signals whether to terminate the program with the close button or not
      */
-    protected void buildFrame(boolean terminate) {
+    protected void buildFrame() {
         master.setIconImage(new ImageIcon("resources/github.png").getImage());
         master.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
-        master.setDefaultCloseOperation(terminate ? WindowConstants.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
+        master.setDefaultCloseOperation(terminates ? WindowConstants.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
         //master.setResizable(false);
-
-        buildMainPanel();
-
-        master.pack();
-        master.setVisible(true);
     }
 
     /**
@@ -58,10 +64,6 @@ public class DvrUI implements DvrUIListener {
      * method to add its own components.
      */
     protected void buildMainPanel() {
-        // top tool bar
-        JToolBar toolBar = new JToolBar();
-        buildToolBar(toolBar);
-
         // initial display on the graph side
         JPanel initial = new JPanel();
         JLabel begin = new JLabel();
@@ -80,19 +82,14 @@ public class DvrUI implements DvrUIListener {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         scroll.setViewportView(text);*/
 
-        display = new JPanel();
         display.add(initial, BorderLayout.CENTER);
-
-        master.add(toolBar, BorderLayout.NORTH);
-        master.add(display, BorderLayout.CENTER);
     }
 
     /**
      * Build the tool bar at the top of the frame. This is mostly adding buttons and binding
      * animation timers to them.
-     * @param toolBar tool bar to build
      */
-    protected void buildToolBar(JToolBar toolBar) {
+    protected void buildToolBar() {
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         toolBar.setFloatable(false);
 
@@ -124,6 +121,18 @@ public class DvrUI implements DvrUIListener {
         toolBar.add(edit);
     }
 
+    /**
+     * Add all components and perform the operations needed to make the frame visible.
+     */
+    protected void finishBuild() {
+        master.add(toolBar, BorderLayout.NORTH);
+        master.add(display, BorderLayout.CENTER);
+        master.pack();
+        master.setVisible(true);
+    }
+
+    /* ============================================================================================================== */
+
     private void onLoad() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
@@ -153,72 +162,64 @@ public class DvrUI implements DvrUIListener {
         display.repaint();
     }
 
-    /**
-     * Print the routing table for each node on the screen.
-     */
-    /*private void printAll() {
-        for (Node node : nodes) {
-            RoutingTable table = node.getTable();
-
-            // print the top neighbour line
-            UI.println("Node " + node.getKey());
-            UI.print("    ");
-            for (int i = 0; i < table.neighbourSize(); i++)
-                UI.print(table.getNeighbourAt(i) + " ");
-            UI.println();
-
-            // print the destination and the link values
-            for (int i = 0; i < table.destinationSize(); i++) {
-
-                // print the destination
-                UI.print(" " + table.getDestinationAt(i) + ": ");
-
-                // print all values from this row of the table
-                int[] row = table.getRow(i);
-                for (int j = 0; j < table.neighbourSize(); j++) {
-                    String str = row[j] + "";
-                    if (row[j] == Integer.MAX_VALUE) str = "/";
-                    UI.print(str + " ");
-                }
-                UI.println();
-            }
-            UI.println();
-        }
-        UI.println("-----------------");
-    }
-
-    *//**
-     * Report the time taken to execute the DVR algorithm.
-     *//*
-    private void printTime(long time) {
-        UI.println("Time: " +
-                new DecimalFormat("#.####").format(time/Math.pow(10, 6))
-                + " milliseconds.");
-    }
-
-    *//**
-     * Print the current path stored in the currentPath attribute.
-     * @param n1 node from
-     * @param n2 node to
-     * @param cost table cost
-     *//*
-    private void printPath(Node n1, Node n2, int cost) {
-        UI.println("From node " + n1.getKey() + " to " + n2.getKey());
-        UI.println("Total cost from table: " + cost);
-        UI.print("Path: ");
-        for (Node n : currentPath) {
-            UI.print(n.getKey() + " ");
-        } UI.println();
-        currentPath.clear();
-    }*/
-
-    /**
-     * Print a message to the screen.
-     * @param message string message
-     */
-    private void print(String message) {
-        text.append(message);
-    }
+//    /**
+//     * Print the routing table for each node on the screen.
+//     */
+//    private void printAll() {
+//        for (Node node : nodes) {
+//            RoutingTable table = node.getTable();
+//
+//            // print the top neighbour line
+//            UI.println("Node " + node.getKey());
+//            UI.print("    ");
+//            for (int i = 0; i < table.neighbourSize(); i++)
+//                UI.print(table.getNeighbourAt(i) + " ");
+//            UI.println();
+//
+//            // print the destination and the link values
+//            for (int i = 0; i < table.destinationSize(); i++) {
+//
+//                // print the destination
+//                UI.print(" " + table.getDestinationAt(i) + ": ");
+//
+//                // print all values from this row of the table
+//                int[] row = table.getRow(i);
+//                for (int j = 0; j < table.neighbourSize(); j++) {
+//                    String str = row[j] + "";
+//                    if (row[j] == Integer.MAX_VALUE) str = "/";
+//                    UI.print(str + " ");
+//                }
+//                UI.println();
+//            }
+//            UI.println();
+//        }
+//        UI.println("-----------------");
+//    }
+//
+//    /**
+//     * Report the time taken to execute the DVR algorithm.
+//     */
+//    private void printTime(long time) {
+//        UI.println("Time: " +
+//                new DecimalFormat("#.####").format(time/Math.pow(10, 6))
+//                + " milliseconds.");
+//    }
+//
+//    /**
+//     * Print the current path stored in the currentPath attribute.
+//     * @param n1 node from
+//     * @param n2 node to
+//     * @param cost table cost
+//     */
+//    private void printPath(Node n1, Node n2, int cost) {
+//        UI.println("From node " + n1.getKey() + " to " + n2.getKey());
+//        UI.println("Total cost from table: " + cost);
+//        UI.print("Path: ");
+//        for (Node n : currentPath) {
+//            UI.print(n.getKey() + " ");
+//        } UI.println();
+//        currentPath.clear();
+//    }
 
     public Rectangle getFrameBounds() {
         return master.getBounds();
@@ -227,7 +228,7 @@ public class DvrUI implements DvrUIListener {
     @Override
     public void update(DvrUINotifier notifier, Object... args) {
         for (Object o : args) {
-            print(o + "\n");
+            //
         }
     }
 

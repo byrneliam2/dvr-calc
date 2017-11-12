@@ -16,8 +16,8 @@ public class DvrEditor extends DvrUI {
     }
 
     @Override
-    protected void buildFrame(boolean terminate) {
-        super.buildFrame(terminate);
+    protected void buildFrame() {
+        super.buildFrame();
         master.setResizable(false);
     }
 
@@ -27,7 +27,7 @@ public class DvrEditor extends DvrUI {
     }
 
     @Override
-    protected void buildToolBar(JToolBar toolBar) {
-        super.buildToolBar(toolBar);
+    protected void buildToolBar() {
+        //
     }
 }
