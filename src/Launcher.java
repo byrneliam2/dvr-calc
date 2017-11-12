@@ -9,9 +9,10 @@ import javax.swing.*;
 public class Launcher {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() ->
-            new DvrUI("DVR Calculator", true)
-        );
+        SwingUtilities.invokeLater(() -> {
+            DvrUI ui = new DvrUI("DVR Calculator", true);
+            ui.build();
+        });
     }
 
 }

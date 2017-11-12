@@ -18,13 +18,13 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Primary hosting class for the UI component set.
+ * A basic user interface that comprises a top tool bar and a main display area.
  */
 public class DvrUI implements DvrUIListener {
 
     // Swing components
     protected JFrame master;
-    private JToolBar toolBar;
+    protected JToolBar toolBar;
     protected JPanel display;
 
     // Other components
@@ -34,14 +34,19 @@ public class DvrUI implements DvrUIListener {
     public DvrUI(String title, boolean terminates) {
         this.master = new JFrame(title);
         this.toolBar = new JToolBar();
-        display = new JPanel();
+        this.display = new JPanel();
         this.router = new DistanceVectorRouter(this);
         this.terminates = terminates;
-
-        onBuild();
     }
 
-    protected void onBuild() {
+    /**
+     * Start the building sequence to set up the UI. This involves, in order:
+     * <li>- building the frame</li>
+     * <li>- building the tool bar</li>
+     * <li>- building the display</li>
+     * <li>- completing the setup by adding and packing components</li>
+     */
+    public void build() {
         buildFrame();
         buildToolBar();
         buildMainPanel();
@@ -55,7 +60,6 @@ public class DvrUI implements DvrUIListener {
         master.setIconImage(new ImageIcon("resources/github.png").getImage());
         master.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
         master.setDefaultCloseOperation(terminates ? WindowConstants.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
-        //master.setResizable(false);
     }
 
     /**
@@ -75,13 +79,6 @@ public class DvrUI implements DvrUIListener {
         begin.setHorizontalAlignment(SwingConstants.CENTER);
         initial.add(begin, BorderLayout.CENTER);
 
-        /*// side text area
-        JScrollPane scroll = new JScrollPane();
-        text = new JTextArea();
-        DefaultCaret caret = (DefaultCaret) text.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        scroll.setViewportView(text);*/
-
         display.add(initial, BorderLayout.CENTER);
     }
 
@@ -98,6 +95,7 @@ public class DvrUI implements DvrUIListener {
         JButton route = ElementUtilities.giveButton("Route", ElementUtilities.BUTTON_DEFAULT);
         JButton edit = ElementUtilities.giveButton("Graph Editor", ElementUtilities.BUTTON_SECONDARY);
 
+        // FIXME animation bugs
         Timer tload = ElementUtilities.giveFlashingAnimation(load, Color.GREEN);
         Timer trun = ElementUtilities.giveFlashingAnimation(run, Color.GREEN);
         tload.start();
@@ -105,7 +103,7 @@ public class DvrUI implements DvrUIListener {
             tload.stop();
             trun.stop();
             ElementUtilities.returnToDefaultColour(load);
-            onLoad();
+            onLoad("Select a topology to load");
             trun.start();
         });
         run.addActionListener((e) -> {
@@ -133,11 +131,11 @@ public class DvrUI implements DvrUIListener {
 
     /* ============================================================================================================== */
 
-    private void onLoad() {
+    private void onLoad(String title) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setApproveButtonText("Load");
-        fileChooser.setDialogTitle("Select a topology to load");
+        fileChooser.setDialogTitle(title);
         if (fileChooser.showOpenDialog(master) == JFileChooser.APPROVE_OPTION) {
             router.onLoad(fileChooser.getSelectedFile());
             onDraw(router.getNodes());
