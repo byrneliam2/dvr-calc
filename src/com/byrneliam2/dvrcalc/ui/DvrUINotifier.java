@@ -8,6 +8,11 @@ package com.byrneliam2.dvrcalc.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Subject abstraction that allows subclasses to send notifications to listeners
+ * at any given point. The listeners are stored in an ordered collection and cre updated
+ * in that order.
+ */
 public abstract class DvrUINotifier {
 
     private List<DvrUIListener> listeners;
