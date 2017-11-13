@@ -32,8 +32,9 @@ public class DistanceVectorRouter extends DvrUINotifier {
 
     /**
      * Load the nodes from the topology file and setup the routing table for each node.
+     * @return outcome of loading file
      */
-    public void onLoad(File file) {
+    public boolean onLoad(File file) {
         // clean up on every load
         nodes.clear();
         hasBeenRun = false;
@@ -55,9 +56,11 @@ public class DistanceVectorRouter extends DvrUINotifier {
             scan.close();
 
             hasBeenLoaded = true;
-        } catch (IOException | NullPointerException e) {
-            System.out.println("File Failure: " + e); // FIXME no println
+        } catch (IOException | InputMismatchException e) {
+            sendToListeners("File failure: " + e.getClass().getSimpleName());
+            return false;
         }
+        return true;
     }
 
     /**
@@ -66,7 +69,6 @@ public class DistanceVectorRouter extends DvrUINotifier {
     public void onRun() {
         if (isError(!hasBeenLoaded, "Please load a topology first.")) return;
 
-        Timer.start();
         // for every node (as in Bellman-Ford)
         for (int i = 0; i < nodes.size(); i++) {
             // for every node (literal)
@@ -81,10 +83,8 @@ public class DistanceVectorRouter extends DvrUINotifier {
                 }
             }
         }
-        long time = Timer.stop();
 
-        /*printAll();
-        printTime(time);*/
+        /*printAll();*/
 
         hasBeenRun = true;
     }
@@ -267,23 +267,6 @@ public class DistanceVectorRouter extends DvrUINotifier {
                     getShortestRoute(find(next)),
                     n2, cost + current.getNeighbours().get(next),
                     max);
-        }
-    }
-
-    /* =================================================================================== */
-
-    private static class Timer {
-
-        private static long time;
-
-        static void start() {
-            time = System.nanoTime();
-        }
-
-        static long stop() {
-            long out = System.nanoTime() - time;
-            time = 0;
-            return out;
         }
     }
 }

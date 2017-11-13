@@ -140,7 +140,7 @@ public class DvrUI implements DvrUIListener {
         fileChooser.setApproveButtonText("Load");
         fileChooser.setDialogTitle("Select a topology to load");
         if (fileChooser.showOpenDialog(master) == JFileChooser.APPROVE_OPTION) {
-            router.onLoad(fileChooser.getSelectedFile());
+            if (!router.onLoad(fileChooser.getSelectedFile())) return false;
             onDraw(router.getNodes());
             return true;
         }
@@ -197,15 +197,6 @@ public class DvrUI implements DvrUIListener {
 //    }
 //
 //    /**
-//     * Report the time taken to execute the DVR algorithm.
-//     */
-//    private void printTime(long time) {
-//        UI.println("Time: " +
-//                new DecimalFormat("#.####").format(time/Math.pow(10, 6))
-//                + " milliseconds.");
-//    }
-//
-//    /**
 //     * Print the current path stored in the currentPath attribute.
 //     * @param n1 node from
 //     * @param n2 node to
@@ -228,7 +219,8 @@ public class DvrUI implements DvrUIListener {
     @Override
     public void update(DvrUINotifier notifier, Object... args) {
         for (Object o : args) {
-            if (o instanceof String) System.out.println(o);
+            if (o instanceof String)
+                JOptionPane.showMessageDialog(master, o, "Warning", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

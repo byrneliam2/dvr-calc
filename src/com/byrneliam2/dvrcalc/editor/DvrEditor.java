@@ -11,7 +11,6 @@ import com.byrneliam2.dvrcalc.ui.DvrUI;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.io.File;
 
 import static com.byrneliam2.dvrcalc.ui.DvrUI.ElementUtilities.*;
 
