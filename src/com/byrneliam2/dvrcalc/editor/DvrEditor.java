@@ -42,8 +42,7 @@ public class DvrEditor extends DvrUI {
     }
 
     @Override
-    protected void buildToolBar() {
-        toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-        toolBar.setFloatable(false);
+    protected void buildButtons() {
+        //
     }
 }

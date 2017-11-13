@@ -49,6 +49,7 @@ public class DvrUI implements DvrUIListener {
     public void build() {
         buildFrame();
         buildToolBar();
+        buildButtons();
         buildMainPanel();
         finishBuild();
     }
@@ -60,6 +61,43 @@ public class DvrUI implements DvrUIListener {
         master.setIconImage(new ImageIcon("resources/github.png").getImage());
         master.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
         master.setDefaultCloseOperation(terminates ? WindowConstants.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    /**
+     * Build the tool bar at the top of the frame. This is mostly adding buttons and binding
+     * animation timers to them.
+     */
+    protected void buildToolBar() {
+        toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        toolBar.setFloatable(false);
+    }
+
+    protected void buildButtons() {
+        JButton load = ElementUtilities.giveButton("Load", ElementUtilities.BUTTON_DEFAULT);
+        JButton run = ElementUtilities.giveButton("Run", ElementUtilities.BUTTON_DEFAULT);
+        JButton route = ElementUtilities.giveButton("Route", ElementUtilities.BUTTON_DEFAULT);
+        JButton edit = ElementUtilities.giveButton("Graph Editor", ElementUtilities.BUTTON_SECONDARY);
+
+        Timer tload = ElementUtilities.giveFlashingAnimation(load, Color.GREEN);
+        Timer trun = ElementUtilities.giveFlashingAnimation(run, Color.GREEN);
+        tload.start();
+        load.addActionListener((e) -> {
+            tload.stop();
+            trun.stop();
+            ElementUtilities.returnToDefaultColour(load);
+            if (onLoad("Select a topology to load")) trun.start();
+        });
+        run.addActionListener((e) -> {
+            trun.stop();
+            ElementUtilities.returnToDefaultColour(run);
+            onRun();
+        });
+        route.addActionListener((e) -> onRoute());
+        edit.addActionListener((e) -> new DvrEditor());
+        toolBar.add(load);
+        toolBar.add(run);
+        toolBar.add(route);
+        toolBar.add(edit);
     }
 
     /**
@@ -83,43 +121,6 @@ public class DvrUI implements DvrUIListener {
     }
 
     /**
-     * Build the tool bar at the top of the frame. This is mostly adding buttons and binding
-     * animation timers to them.
-     */
-    protected void buildToolBar() {
-        toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-        toolBar.setFloatable(false);
-
-        JButton load = ElementUtilities.giveButton("Load", ElementUtilities.BUTTON_DEFAULT);
-        JButton run = ElementUtilities.giveButton("Run", ElementUtilities.BUTTON_DEFAULT);
-        JButton route = ElementUtilities.giveButton("Route", ElementUtilities.BUTTON_DEFAULT);
-        JButton edit = ElementUtilities.giveButton("Graph Editor", ElementUtilities.BUTTON_SECONDARY);
-
-        // FIXME animation bugs
-        Timer tload = ElementUtilities.giveFlashingAnimation(load, Color.GREEN);
-        Timer trun = ElementUtilities.giveFlashingAnimation(run, Color.GREEN);
-        tload.start();
-        load.addActionListener((e) -> {
-            tload.stop();
-            trun.stop();
-            ElementUtilities.returnToDefaultColour(load);
-            onLoad("Select a topology to load");
-            trun.start();
-        });
-        run.addActionListener((e) -> {
-            trun.stop();
-            ElementUtilities.returnToDefaultColour(run);
-            onRun();
-        });
-        route.addActionListener((e) -> onRoute());
-        edit.addActionListener((e) -> new DvrEditor());
-        toolBar.add(load);
-        toolBar.add(run);
-        toolBar.add(route);
-        toolBar.add(edit);
-    }
-
-    /**
      * Add all components and perform the operations needed to make the frame visible.
      */
     protected void finishBuild() {
@@ -131,7 +132,7 @@ public class DvrUI implements DvrUIListener {
 
     /* ============================================================================================================== */
 
-    private void onLoad(String title) {
+    private boolean onLoad(@SuppressWarnings("SameParameterValue") String title) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setApproveButtonText("Load");
@@ -139,7 +140,9 @@ public class DvrUI implements DvrUIListener {
         if (fileChooser.showOpenDialog(master) == JFileChooser.APPROVE_OPTION) {
             router.onLoad(fileChooser.getSelectedFile());
             onDraw(router.getNodes());
+            return true;
         }
+        return false;
     }
 
     private void onRun() {
@@ -226,7 +229,7 @@ public class DvrUI implements DvrUIListener {
     @Override
     public void update(DvrUINotifier notifier, Object... args) {
         for (Object o : args) {
-            //
+            if (o instanceof String) System.out.println(o);
         }
     }
 
