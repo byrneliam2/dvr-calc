@@ -55,12 +55,15 @@ public class DvrUI implements DvrUIListener {
     }
 
     /**
-     * Build the master frame on setup.
+     * Build the master frame on setup. By default, this sets the size of the window to be that as defined
+     * by the product of WIDTH and HEIGHT in UIConstants. This calculation is applied to the display however,
+     * not the frame, otherwise the frame's decorations are counted in the size.
      */
     protected void buildFrame() {
         master.setIconImage(new ImageIcon("resources/github.png").getImage());
-        master.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
         master.setDefaultCloseOperation(terminates ? WindowConstants.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
+
+        display.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
     }
 
     /**
@@ -111,7 +114,8 @@ public class DvrUI implements DvrUIListener {
         // initial display on the graph side
         JPanel initial = new JPanel();
         JLabel begin = new JLabel();
-        initial.setPreferredSize(new Dimension(2*UIConstants.WIDTH.getValue()/3, UIConstants.HEIGHT.getValue()));
+        initial.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(),
+                UIConstants.HEIGHT.getValue()));
         initial.setLayout(new BorderLayout());
         begin.setFont(new Font("Arial", Font.BOLD, 36));
         begin.setText("Please load a topology.");
@@ -212,8 +216,8 @@ public class DvrUI implements DvrUIListener {
 //        currentPath.clear();
 //    }
 
-    public Rectangle getFrameBounds() {
-        return master.getBounds();
+    public Rectangle getDisplayBounds() {
+        return display.getBounds();
     }
 
     @Override
@@ -241,7 +245,8 @@ public class DvrUI implements DvrUIListener {
          */
         public static JButton giveButton(String text, Color col) {
             JButton button = new JButton(text);
-            button.setPreferredSize(new Dimension(135, 35));
+            button.setPreferredSize(new Dimension(UIConstants.BUTTON_WIDTH.getValue(),
+                    UIConstants.BUTTON_HEIGHT.getValue()));
             button.setBackground(col);
             return button;
         }

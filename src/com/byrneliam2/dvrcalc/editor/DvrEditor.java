@@ -21,10 +21,14 @@ import static com.byrneliam2.dvrcalc.ui.DvrUI.ElementUtilities.*;
 public class DvrEditor extends DvrUI {
 
     private JTextArea editor;
+    private JScrollPane scroll;
+    private JLabel indicator;
 
     public DvrEditor() {
         super("DVR Editor", false);
         editor = new JTextArea();
+        scroll = new JScrollPane();
+        indicator = new JLabel();
 
         build();
     }
@@ -37,14 +41,19 @@ public class DvrEditor extends DvrUI {
 
     @Override
     public void buildMainPanel() {
-        editor.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue(), UIConstants.HEIGHT.getValue()));
         editor.setFont(new Font("Courier New", Font.PLAIN, 14));
 
-        JScrollPane scroll = new JScrollPane();
+        // Need to shave off some extra height to accommodate the JLabel underneath comfortably
+        scroll.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue() - UIConstants.EDITOR_BUFFER.getValue(),
+                UIConstants.HEIGHT.getValue() - UIConstants.EDITOR_BUFFER.getValue()*3));
         DefaultCaret caret = (DefaultCaret) editor.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         scroll.setViewportView(editor);
         display.add(scroll, BorderLayout.CENTER);
+
+        indicator.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        indicator.setText("Test");
+        display.add(indicator, BorderLayout.SOUTH);
     }
 
     @Override
