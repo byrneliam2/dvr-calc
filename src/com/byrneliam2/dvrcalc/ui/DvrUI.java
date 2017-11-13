@@ -87,7 +87,7 @@ public class DvrUI implements DvrUIListener {
             tload.stop();
             trun.stop();
             ElementUtilities.returnToDefaultColour(load);
-            if (onLoad("Select a topology to load")) trun.start();
+            if (onLoad()) trun.start();
         });
         run.addActionListener((e) -> {
             trun.stop();
@@ -134,11 +134,11 @@ public class DvrUI implements DvrUIListener {
 
     /* ============================================================================================================== */
 
-    private boolean onLoad(String title) {
+    private boolean onLoad() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setApproveButtonText("Load");
-        fileChooser.setDialogTitle(title);
+        fileChooser.setDialogTitle("Select a topology to load");
         if (fileChooser.showOpenDialog(master) == JFileChooser.APPROVE_OPTION) {
             router.onLoad(fileChooser.getSelectedFile());
             onDraw(router.getNodes());
@@ -237,17 +237,17 @@ public class DvrUI implements DvrUIListener {
     /**
      * Helper inner class for the UI.
      */
-    static class ElementUtilities {
+    public static class ElementUtilities {
 
-        private static final Color BUTTON_DEFAULT = Color.WHITE;
-        private static final Color BUTTON_SECONDARY = Color.LIGHT_GRAY;
+        public static final Color BUTTON_DEFAULT = Color.WHITE;
+        public static final Color BUTTON_SECONDARY = Color.LIGHT_GRAY;
 
         /**
          * Create a specialised button for the UI.
          * @param text text to go on the button
          * @return new JButton
          */
-        static JButton giveButton(String text, Color col) {
+        public static JButton giveButton(String text, Color col) {
             JButton button = new JButton(text);
             button.setPreferredSize(new Dimension(135, 35));
             button.setBackground(col);
@@ -259,7 +259,7 @@ public class DvrUI implements DvrUIListener {
          * @param j component
          * @return new Swing timer
          */
-        static Timer giveFlashingAnimation(JComponent j, Color col) {
+        public static Timer giveFlashingAnimation(JComponent j, Color col) {
             return new Timer(1000, new ActionListener() {
                 boolean flash = true;
 
@@ -277,7 +277,7 @@ public class DvrUI implements DvrUIListener {
          * Reset a component's colour to default.
          * @param j component
          */
-        static void returnToDefaultColour(JComponent j) {
+        public static void returnToDefaultColour(JComponent j) {
             j.setBackground(BUTTON_DEFAULT);
         }
     }

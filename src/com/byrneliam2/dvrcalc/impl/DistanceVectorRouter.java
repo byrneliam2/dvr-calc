@@ -56,7 +56,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
 
             hasBeenLoaded = true;
         } catch (IOException | NullPointerException e) {
-            System.out.println("File Failure: " + e); // FIXME
+            System.out.println("File Failure: " + e); // FIXME no println
         }
     }
 

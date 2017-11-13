@@ -11,6 +11,9 @@ import com.byrneliam2.dvrcalc.ui.DvrUI;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.io.File;
+
+import static com.byrneliam2.dvrcalc.ui.DvrUI.ElementUtilities.*;
 
 /**
  * Standalone editor that can be launched from within the main application. This uses
@@ -47,6 +50,15 @@ public class DvrEditor extends DvrUI {
 
     @Override
     protected void buildButtons() {
-        //
+        JButton save = giveButton("Save", BUTTON_DEFAULT);
+
+        save.addActionListener((e) -> onSave());
+        toolBar.add(save);
+    }
+
+    /* ============================================================================================================== */
+
+    private void onSave() {
+        // TODO save to currently open graph file and reload
     }
 }

@@ -48,7 +48,6 @@ public class DvrPanel extends JPanel {
             // loop on all neighbours
             Set<Character> keys = n.getNeighbours().keySet();
             for (char k : keys) {
-                // TODO make links only draw once
                 // Search in the list of nodes for this node wth name "s"
                 Node neighbour = new DistanceVectorRouter.DVUtils(nodes).find(k);
                 if (neighbour != null) // there is a neighbour
