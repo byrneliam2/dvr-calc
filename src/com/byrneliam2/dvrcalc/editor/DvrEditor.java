@@ -9,6 +9,8 @@ import com.byrneliam2.dvrcalc.common.UIConstants;
 import com.byrneliam2.dvrcalc.ui.DvrUI;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
@@ -42,18 +44,26 @@ public class DvrEditor extends DvrUI {
     @Override
     public void buildMainPanel() {
         editor.setFont(new Font("Courier New", Font.PLAIN, 14));
+        editor.getDocument().addDocumentListener(new DocumentListener() {
+             @Override public void insertUpdate(DocumentEvent e) { updateIndicator(); }
+             @Override public void removeUpdate(DocumentEvent e) { updateIndicator(); }
+             @Override public void changedUpdate(DocumentEvent e) {}
+         });
 
         // Need to shave off some extra height to accommodate the JLabel underneath comfortably
         scroll.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue() - UIConstants.EDITOR_BUFFER.getValue(),
-                UIConstants.HEIGHT.getValue() - UIConstants.EDITOR_BUFFER.getValue()*3));
+                UIConstants.HEIGHT.getValue() - UIConstants.EDITOR_BUFFER.getValue() * 3));
         DefaultCaret caret = (DefaultCaret) editor.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         scroll.setViewportView(editor);
         display.add(scroll, BorderLayout.CENTER);
 
-        indicator.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        indicator.setText("Test");
+        /*int caretOffset = txt.getCaretPosition();
+        int lineNumber = txt.getLineOfOffset(caretOffset);
+        int startOffset = txt.getLineStartOffset(lineNumber);
+        int endOffset = txt.getLineEndOffset(lineNumber);*/
         display.add(indicator, BorderLayout.SOUTH);
+        updateIndicator();
     }
 
     @Override
@@ -62,6 +72,10 @@ public class DvrEditor extends DvrUI {
 
         save.addActionListener((e) -> onSave());
         toolBar.add(save);
+    }
+
+    private void updateIndicator() {
+        indicator.setText(editor.getCaretPosition()+"");
     }
 
     /* ============================================================================================================== */
