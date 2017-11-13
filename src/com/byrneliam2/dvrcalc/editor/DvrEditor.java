@@ -12,6 +12,10 @@ import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
+/**
+ * Standalone editor that can be launched from within the main application. This uses
+ * the DvrUI class to generate a slightly different version of the regular UI.
+ */
 public class DvrEditor extends DvrUI {
 
     private JTextArea editor;

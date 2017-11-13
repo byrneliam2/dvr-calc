@@ -64,14 +64,16 @@ public class DvrUI implements DvrUIListener {
     }
 
     /**
-     * Build the tool bar at the top of the frame. This is mostly adding buttons and binding
-     * animation timers to them.
+     * Build the tool bar at the top of the frame.
      */
     protected void buildToolBar() {
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         toolBar.setFloatable(false);
     }
 
+    /**
+     * Build and add buttons to the tool bar.
+     */
     protected void buildButtons() {
         JButton load = ElementUtilities.giveButton("Load", ElementUtilities.BUTTON_DEFAULT);
         JButton run = ElementUtilities.giveButton("Run", ElementUtilities.BUTTON_DEFAULT);
@@ -132,7 +134,7 @@ public class DvrUI implements DvrUIListener {
 
     /* ============================================================================================================== */
 
-    private boolean onLoad(@SuppressWarnings("SameParameterValue") String title) {
+    private boolean onLoad(String title) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setApproveButtonText("Load");
@@ -153,9 +155,6 @@ public class DvrUI implements DvrUIListener {
         router.onRoute();
     }
 
-    /**
-     * Draw the graph on the screen.
-     */
     private void onDraw(List<Node> nodes) {
         display.removeAll();
         display.add(new DvrPanel(nodes), BorderLayout.CENTER);
