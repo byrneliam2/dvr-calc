@@ -23,6 +23,10 @@ public class Node {
         this.neighbours = new HashMap<>();
     }
 
+    Node() {
+        this.neighbours = new HashMap<>();
+    }
+
     /**
      * Initialises the routing table.
      */
@@ -93,6 +97,18 @@ public class Node {
 
     public int getY() {
         return y;
+    }
+
+    public void setKey(char key) {
+        this.key = key;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public HashMap<Character, Integer> getNeighbours() {
