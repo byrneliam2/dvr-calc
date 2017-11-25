@@ -19,13 +19,13 @@ import static com.byrneliam2.dvrcalc.ui.DvrUI.ElementUtilities.*;
  * Standalone editor that can be launched from within the main application. This uses
  * the DvrUI class to generate a slightly different version of the regular UI.
  */
-public class DvrEditor extends DvrUI {
+public class DvrEditorUI extends DvrUI {
 
     private JTextArea editor;
     private JScrollPane scroll;
     private JLabel indicator;
 
-    DvrEditor() {
+    DvrEditorUI() {
         super("DVR Editor", false);
         editor = new JTextArea();
         scroll = new JScrollPane();

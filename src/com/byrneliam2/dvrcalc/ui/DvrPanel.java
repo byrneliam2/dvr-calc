@@ -52,8 +52,8 @@ public class DvrPanel extends JPanel {
                 Node neighbour = new DistanceVectorRouter.DVUtils(nodes).find(k);
                 if (neighbour != null) // there is a neighbour
                 {
-                    g2.drawLine(n.getX() + 20, n.getY() + 20,
-                            neighbour.getX() + 20, neighbour.getY() + 20);
+                    g2.drawLine(n.getX() + Node.BOUNDS/2, n.getY() + Node.BOUNDS/2,
+                            neighbour.getX() + Node.BOUNDS/2, neighbour.getY() + Node.BOUNDS/2);
                     g2.drawString(n.getNeighbours().get(k) + "",
                             n.getX() + ((neighbour.getX() - n.getX())/2),
                             n.getY() + ((neighbour.getY() - n.getY())/2) + 15);
