@@ -8,18 +8,11 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.util.*;
 import java.io.*;
-
-/*
- * NOTES:
- * File consists of a node, x and y position, number of neighbours and the neighbours/distance
- * in alphabetical order.
- */
 
 /*
  * Liam Byrne (byrneliam2)
@@ -42,40 +35,6 @@ public class DistanceVectorRouter extends DvrUINotifier {
     /**
      * Load the nodes from the topology file and setup the routing table for each node.
      * @return outcome of loading file
-     * TODO replace with StAX parsing
-     */
-    public boolean onLoadX(File file) {
-        // clean up on every load
-        nodes.clear();
-        hasBeenRun = false;
-
-        try {
-            Scanner scan = new Scanner(file);
-            while (scan.hasNext()) {
-                String n = scan.next();
-                int x = scan.nextInt();
-                int y = scan.nextInt();
-                Node node = new Node(n.charAt(0), x, y);
-                int count = scan.nextInt(); // the number of neighbouring nodes
-                for (int i = 0; i < count; i++)
-                    node.addNeighbour(scan.next().charAt(0), scan.nextInt());
-
-                this.nodes.add(node);
-            }
-            for (Node n : nodes) n.setupRoutingTable(nodes);
-            scan.close();
-
-            hasBeenLoaded = true;
-        } catch (IOException | InputMismatchException e) {
-            sendToListeners("File failure: " + e.getClass().getSimpleName());
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Load the nodes from the topology file and setup the routing table for each node.
-     * @return outcome of loading file
      */
     public boolean onLoad(File file) {
         nodes.clear();
@@ -83,7 +42,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLEventReader read = factory.createXMLEventReader(new FileReader(file));
-            Node node = new Node();
+            Node node = new Node(); // store the node reference up top
             while (read.hasNext()) {
                 XMLEvent event = read.nextEvent();
                 // Document should be made up of elements where only the start element and its
@@ -110,7 +69,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
             read.close();
             hasBeenLoaded = true;
         } catch (FileNotFoundException | XMLStreamException e) {
-            sendToListeners("File failure: " + e.getClass().getSimpleName());
+            sendToListeners("File failure: " + e.getClass().getSimpleName() + " occurred.");
             return false;
         }
         return true;

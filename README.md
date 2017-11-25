@@ -8,8 +8,8 @@ Loads topology files and generates routing tables for each router. Uses relaxati
 - [x] Calculate initial DVR table
 - [x] Fill table using DVR protocol and update initial tables
 - [x] Basic route finding mechanism using the generated tables
+- [x] Standardised file formatting with XML
 - [ ] Interactive graph showing individual tables for each node
 - [ ] Table highlighting to show best route
 - [ ] Updated route finding (link state)
-- [ ] Standardised file formatting (e.g. XML, JSON)
 - [ ] Inbuilt editor for files
