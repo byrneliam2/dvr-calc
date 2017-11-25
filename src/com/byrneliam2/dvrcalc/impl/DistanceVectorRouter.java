@@ -3,11 +3,13 @@ package com.byrneliam2.dvrcalc.impl;
 import com.byrneliam2.dvrcalc.ui.DvrUIListener;
 import com.byrneliam2.dvrcalc.ui.DvrUINotifier;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.util.*;
@@ -42,7 +44,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
      * @return outcome of loading file
      * TODO replace with StAX parsing
      */
-    public boolean onLoad(File file) {
+    public boolean onLoadX(File file) {
         // clean up on every load
         nodes.clear();
         hasBeenRun = false;
@@ -75,29 +77,33 @@ public class DistanceVectorRouter extends DvrUINotifier {
      * Load the nodes from the topology file and setup the routing table for each node.
      * @return outcome of loading file
      */
-    public boolean onLoad2(File file) {
+    public boolean onLoad(File file) {
         nodes.clear();
         hasBeenRun = false;
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLEventReader read = factory.createXMLEventReader(new FileReader(file));
+            Node node = new Node();
             while (read.hasNext()) {
                 XMLEvent event = read.nextEvent();
                 // Document should be made up of elements where only the start element and its
                 // attributes are relevant. Hence, this loading system assumes this.
-                if (event.getEventType() != XMLStreamConstants.START_ELEMENT) continue;
-                StartElement start = event.asStartElement();
-                String qname = start.getName().getLocalPart();
-                Iterator<Attribute> attrs = start.getAttributes();
-                Node n = new Node();
-                if (qname.equals("node")) {
-                    n.setKey(attrs.next().getValue().charAt(0));
-                    n.setX(Integer.parseInt(attrs.next().getValue()));
-                    n.setY(Integer.parseInt(attrs.next().getValue()));
-                }
-                else if (qname.equals("neighbour")) {
-                    n.addNeighbour(attrs.next().getValue().charAt(0),
-                            Integer.parseInt(attrs.next().getValue()));
+                if (event.getEventType() == XMLStreamConstants.START_ELEMENT) {
+                    StartElement start = event.asStartElement();
+                    String qname = start.getName().getLocalPart();
+                    if (qname.equals("node")) {
+                        node = new Node();
+                        node.setKey(start.getAttributeByName(new QName("key")).getValue().charAt(0));
+                        node.setX(Integer.parseInt(start.getAttributeByName(new QName("x")).getValue()));
+                        node.setY(Integer.parseInt(start.getAttributeByName(new QName("y")).getValue()));
+                    } else if (qname.equals("neighbour")) {
+                        node.addNeighbour(start.getAttributeByName(new QName("key")).getValue().charAt(0),
+                                Integer.parseInt(start.getAttributeByName(new QName("cost")).getValue()));
+                    }
+                } else if (event.getEventType() == XMLStreamConstants.END_ELEMENT) {
+                    EndElement end = event.asEndElement();
+                    String qname = end.getName().getLocalPart();
+                    if (qname.equals("node")) nodes.add(node);
                 }
             }
             for (Node n : nodes) n.setupRoutingTable(nodes);
