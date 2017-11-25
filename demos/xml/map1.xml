@@ -1,98 +1,39 @@
-<!-- MUST BE ORDERED -->
+<!-- DVR Calculator XML File - ALL NODES AND NEIGHBOURS MUST BE ORDERED -->
+
 <graph>
-    <node>
-        <key>A</key>
-        <neighbour>
-            <key>B</key>
-            <cost>7</cost>
-        </neighbour>
-        <neighbour>
-            <key>E</key>
-            <cost>1</cost>
-        </neighbour>
+    <node key="A" x="100" y="300">
+        <neighbour key="B" cost="7"/>
+        <neighbour key="E" cost="1"/>
     </node>
 
-    <node>
-        <key>B</key>
-        <neighbour>
-            <key>A</key>
-            <cost>7</cost>
-        </neighbour>
-        <neighbour>
-            <key>C</key>
-            <cost>1</cost>
-        </neighbour>
-        <neighbour>
-            <key>E</key>
-            <cost>8</cost>
-        </neighbour>
-        <neighbour>
-            <key>F</key>
-            <cost>9</cost>
-        </neighbour>
+    <node key="B" x="300" y="150">
+        <neighbour key="A" cost="7"/>
+        <neighbour key="C" cost="1"/>
+        <neighbour key="E" cost="8"/>
+        <neighbour key="F" cost="9"/>
     </node>
 
-    <node>
-        <key>C</key>
-        <neighbour>
-            <key>B</key>
-            <cost>1</cost>
-        </neighbour>
-        <neighbour>
-            <key>D</key>
-            <cost>2</cost>
-        </neighbour>
-        <neighbour>
-            <key>F</key>
-            <cost>6</cost>
-        </neighbour>
+    <node key="C" x="500" y="175">
+        <neighbour key="B" cost="1"/>
+        <neighbour key="D" cost="2"/>
+        <neighbour key="F" cost="6"/>
     </node>
 
-    <node>
-        <key>D</key>
-        <neighbour>
-            <key>C</key>
-            <cost>2</cost>
-        </neighbour>
-        <neighbour>
-            <key>E</key>
-            <cost>2</cost>
-        </neighbour>
-        <neighbour>
-            <key>F</key>
-            <cost>4</cost>
-        </neighbour>
+    <node key="D" x="500" y="300">
+        <neighbour key="C" cost="2"/>
+        <neighbour key="E" cost="2"/>
+        <neighbour key="F" cost="4"/>
     </node>
 
-    <node>
-        <key>E</key>
-        <neighbour>
-            <key>A</key>
-            <cost>1</cost>
-        </neighbour>
-        <neighbour>
-            <key>B</key>
-            <cost>8</cost>
-        </neighbour>
-        <neighbour>
-            <key>D</key>
-            <cost>2</cost>
-        </neighbour>
+    <node key="E" x="300" y="300">
+        <neighbour key="A" cost="1"/>
+        <neighbour key="B" cost="8"/>
+        <neighbour key="D" cost="2"/>
     </node>
 
-    <node>
-        <key>F</key>
-        <neighbour>
-            <key>B</key>
-            <cost>9</cost>
-        </neighbour>
-        <neighbour>
-            <key>C</key>
-            <cost>6</cost>
-        </neighbour>
-        <neighbour>
-            <key>D</key>
-            <cost>4</cost>
-        </neighbour>
+    <node key="F" x="700" y="100">
+        <neighbour key="B" cost="9"/>
+        <neighbour key="C" cost="6"/>
+        <neighbour key="D" cost="4"/>
     </node>
 </graph>
