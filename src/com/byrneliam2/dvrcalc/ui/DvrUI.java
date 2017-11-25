@@ -6,7 +6,6 @@ package com.byrneliam2.dvrcalc.ui;
  */
 
 import com.byrneliam2.dvrcalc.common.UIConstants;
-import com.byrneliam2.dvrcalc.editor.DvrEditor;
 import com.byrneliam2.dvrcalc.impl.DistanceVectorRouter;
 import com.byrneliam2.dvrcalc.impl.Node;
 
@@ -23,9 +22,9 @@ import java.util.List;
 public class DvrUI implements DvrUIListener {
 
     // Swing components
-    protected JFrame master;
-    protected JToolBar toolBar;
-    protected JPanel display;
+    JFrame master;
+    JToolBar toolBar;
+    JPanel display;
 
     // Other components
     private DistanceVectorRouter router;
@@ -233,17 +232,17 @@ public class DvrUI implements DvrUIListener {
     /**
      * Helper inner class for the UI.
      */
-    public static class ElementUtilities {
+    static class ElementUtilities {
 
-        public static final Color BUTTON_DEFAULT = Color.WHITE;
-        public static final Color BUTTON_SECONDARY = Color.LIGHT_GRAY;
+        static final Color BUTTON_DEFAULT = Color.WHITE;
+        static final Color BUTTON_SECONDARY = Color.LIGHT_GRAY;
 
         /**
          * Create a specialised button for the UI.
          * @param text text to go on the button
          * @return new JButton
          */
-        public static JButton giveButton(String text, Color col) {
+        static JButton giveButton(String text, Color col) {
             JButton button = new JButton(text);
             button.setPreferredSize(new Dimension(UIConstants.BUTTON_WIDTH.getValue(),
                     UIConstants.BUTTON_HEIGHT.getValue()));
@@ -256,7 +255,7 @@ public class DvrUI implements DvrUIListener {
          * @param j component
          * @return new Swing timer
          */
-        public static Timer giveFlashingAnimation(JComponent j, Color col) {
+        static Timer giveFlashingAnimation(JComponent j, Color col) {
             return new Timer(1000, new ActionListener() {
                 boolean flash = true;
 
@@ -274,7 +273,7 @@ public class DvrUI implements DvrUIListener {
          * Reset a component's colour to default.
          * @param j component
          */
-        public static void returnToDefaultColour(JComponent j) {
+        static void returnToDefaultColour(JComponent j) {
             j.setBackground(BUTTON_DEFAULT);
         }
     }

@@ -1,4 +1,4 @@
-package com.byrneliam2.dvrcalc.editor;
+package com.byrneliam2.dvrcalc.ui;
 
 /*
  * Liam Byrne (byrneliam2)
@@ -6,7 +6,6 @@ package com.byrneliam2.dvrcalc.editor;
  */
 
 import com.byrneliam2.dvrcalc.common.UIConstants;
-import com.byrneliam2.dvrcalc.ui.DvrUI;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -26,7 +25,7 @@ public class DvrEditor extends DvrUI {
     private JScrollPane scroll;
     private JLabel indicator;
 
-    public DvrEditor() {
+    DvrEditor() {
         super("DVR Editor", false);
         editor = new JTextArea();
         scroll = new JScrollPane();

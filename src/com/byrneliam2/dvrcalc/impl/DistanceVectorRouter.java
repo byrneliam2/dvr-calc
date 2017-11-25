@@ -33,6 +33,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
     /**
      * Load the nodes from the topology file and setup the routing table for each node.
      * @return outcome of loading file
+     * TODO replace with StAX parsing
      */
     public boolean onLoad(File file) {
         // clean up on every load
@@ -61,6 +62,10 @@ public class DistanceVectorRouter extends DvrUINotifier {
             return false;
         }
         return true;
+    }
+
+    public boolean onSave() {
+        return false;
     }
 
     /**
@@ -176,7 +181,6 @@ public class DistanceVectorRouter extends DvrUINotifier {
          * Find the node with the given key and return it, or null if it doesn't exist.
          * @param key key of the node
          */
-        @SuppressWarnings("WeakerAccess")
         public Node find(char key) {
             for (Node n : nodes)
                 if (n.getKey() == key)
@@ -191,7 +195,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
          * @return array containing the value of the least cost route in position 0 and the index
          * of the route in the row in position 1.
          */
-        public int[] getNextRoute(int[] row) {
+        int[] getNextRoute(int[] row) {
             int val = -1, pos = -1;
             for (int i = 0; i < row.length; i++) {
                 if (val == -1 && pos == -1) {
@@ -211,7 +215,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
          * @param node node to analyse neighbours of
          * @return character key of the best neighbour
          */
-        public char getShortestRoute(Node node) {
+        char getShortestRoute(Node node) {
             int val = -1;
             char best = '\u0000';
             for (Map.Entry m : node.getNeighbours().entrySet()) {
@@ -235,7 +239,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
          * @param max maximum cost
          * @return character key of the next neighbour to visit
          */
-        public char getNextRoute(Node node, Node end, int cost, int max) {
+        char getNextRoute(Node node, Node end, int cost, int max) {
             int val = -1;
             char best = '\u0000';
             for (Map.Entry m : node.getNeighbours().entrySet()) {
