@@ -30,6 +30,10 @@ public class DvrUI implements DvrUIListener {
     private DistanceVectorRouter router;
     private boolean terminates;
 
+    /**
+     * @param title title for the frame
+     * @param terminates determines whether exiting this frame terminates the application
+     */
     public DvrUI(String title, boolean terminates) {
         this.master = new JFrame(title);
         this.toolBar = new JToolBar();
@@ -40,10 +44,13 @@ public class DvrUI implements DvrUIListener {
 
     /**
      * Start the building sequence to set up the UI. This involves, in order:
-     * <li>- building the frame</li>
-     * <li>- building the tool bar</li>
-     * <li>- building the display</li>
-     * <li>- completing the setup by adding and packing components</li>
+     * <li>- building the frame ({@link #buildFrame()}) </li>
+     * <li>- building the tool bar ({@link #buildToolBar()}) </li>
+     * <li>- building the buttons ({@link #buildButtons()}) </li>
+     * <li>- building the display ({@link #buildMainPanel()}) </li>
+     * <li>- completing the setup by adding and packing components ({@link #finishBuild()}) </li>
+     * <br/>
+     * These methods can be overridden by subclasses to achieve a different UI build.
      */
     public void build() {
         buildFrame();
