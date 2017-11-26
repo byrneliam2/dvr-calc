@@ -22,6 +22,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
 
     private List<Node> nodes = new ArrayList<>();
     private List<Node> currentPath = new ArrayList<>();
+    private File currentFile;
 
     // status checkers
     private boolean hasBeenRun = false;
@@ -39,6 +40,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
     public boolean onLoad(File file) {
         nodes.clear();
         hasBeenRun = false;
+        currentFile = file; // TODO always null after method
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLEventReader read = factory.createXMLEventReader(new FileReader(file));
@@ -169,6 +171,10 @@ public class DistanceVectorRouter extends DvrUINotifier {
 
     public List<Node> getCurrentPath() {
         return currentPath;
+    }
+
+    public File getCurrentFile() {
+        return currentFile;
     }
 
     private void sendToListeners(Object... args) {

@@ -27,7 +27,7 @@ public class DvrUI implements DvrUIListener {
     JPanel display;
 
     // Other components
-    private DistanceVectorRouter router;
+    protected DistanceVectorRouter router;
     private boolean terminates;
 
     /**

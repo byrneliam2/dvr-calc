@@ -62,6 +62,7 @@ public class DvrEditorUI extends DvrUI {
         int startOffset = txt.getLineStartOffset(lineNumber);
         int endOffset = txt.getLineEndOffset(lineNumber);*/
         display.add(indicator, BorderLayout.SOUTH);
+        updateEditor();
         updateIndicator();
     }
 
@@ -71,6 +72,12 @@ public class DvrEditorUI extends DvrUI {
 
         save.addActionListener((e) -> onSave());
         toolBar.add(save);
+    }
+
+    private void updateEditor() {
+        if (router.getCurrentFile() != null) {
+            editor.append(router.getCurrentFile().toString());
+        }
     }
 
     private void updateIndicator() {
