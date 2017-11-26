@@ -84,6 +84,8 @@ public class DvrEditorUI extends DvrUI {
         JButton b_redo = giveButton("Redo", BUTTON_DEFAULT);
         JButton save = giveButton("Save", BUTTON_SECONDARY);
 
+        b_undo.addActionListener((e) -> undo.undo());
+        b_redo.addActionListener((e) -> undo.redo());
         save.addActionListener((e) -> onSave());
 
         toolBar.add(b_undo);
