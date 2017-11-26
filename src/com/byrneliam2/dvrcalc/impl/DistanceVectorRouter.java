@@ -40,7 +40,7 @@ public class DistanceVectorRouter extends DvrUINotifier {
     public boolean onLoad(File file) {
         nodes.clear();
         hasBeenRun = false;
-        currentFile = file; // TODO always null after method
+        currentFile = file;
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLEventReader read = factory.createXMLEventReader(new FileReader(file));

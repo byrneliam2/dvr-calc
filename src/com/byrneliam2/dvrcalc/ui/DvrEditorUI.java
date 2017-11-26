@@ -11,7 +11,9 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultCaret;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -29,13 +31,16 @@ public class DvrEditorUI extends DvrUI {
     private JLabel indicator;
 
     private File currentFile;
+    private UndoManager undo;
 
     DvrEditorUI(File currentFile) {
         super("DVR Editor", false);
         this.editor = new JTextArea();
         this.scroll = new JScrollPane();
         this.indicator = new JLabel();
+
         this.currentFile = currentFile;
+        this.undo = new UndoManager();
 
         build();
     }
@@ -54,6 +59,7 @@ public class DvrEditorUI extends DvrUI {
              @Override public void removeUpdate(DocumentEvent e) { updateIndicator(); }
              @Override public void changedUpdate(DocumentEvent e) {}
          });
+        editor.getDocument().addUndoableEditListener(undo);
 
         // Need to shave off some extra height to accommodate the JLabel underneath comfortably
         scroll.setPreferredSize(new Dimension(UIConstants.WIDTH.getValue() - UIConstants.EDITOR_BUFFER.getValue(),
@@ -74,9 +80,14 @@ public class DvrEditorUI extends DvrUI {
 
     @Override
     protected void buildButtons() {
-        JButton save = giveButton("Save", BUTTON_DEFAULT);
+        JButton b_undo = giveButton("Undo", BUTTON_DEFAULT);
+        JButton b_redo = giveButton("Redo", BUTTON_DEFAULT);
+        JButton save = giveButton("Save", BUTTON_SECONDARY);
 
         save.addActionListener((e) -> onSave());
+
+        toolBar.add(b_undo);
+        toolBar.add(b_redo);
         toolBar.add(save);
     }
 
