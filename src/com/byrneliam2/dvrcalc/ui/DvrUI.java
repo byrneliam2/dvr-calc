@@ -104,7 +104,7 @@ public class DvrUI implements DvrUIListener {
             onRun();
         });
         route.addActionListener((e) -> onRoute());
-        edit.addActionListener((e) -> new DvrEditorUI());
+        edit.addActionListener((e) -> new DvrEditorUI(router.getCurrentFile()));
         toolBar.add(load);
         toolBar.add(run);
         toolBar.add(route);

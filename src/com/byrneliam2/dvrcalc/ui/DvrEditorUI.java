@@ -12,6 +12,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import static com.byrneliam2.dvrcalc.ui.DvrUI.ElementUtilities.*;
 
@@ -25,11 +28,14 @@ public class DvrEditorUI extends DvrUI {
     private JScrollPane scroll;
     private JLabel indicator;
 
-    DvrEditorUI() {
+    private File currentFile;
+
+    DvrEditorUI(File currentFile) {
         super("DVR Editor", false);
-        editor = new JTextArea();
-        scroll = new JScrollPane();
-        indicator = new JLabel();
+        this.editor = new JTextArea();
+        this.scroll = new JScrollPane();
+        this.indicator = new JLabel();
+        this.currentFile = currentFile;
 
         build();
     }
@@ -75,8 +81,14 @@ public class DvrEditorUI extends DvrUI {
     }
 
     private void updateEditor() {
-        if (router.getCurrentFile() != null) {
-            editor.append(router.getCurrentFile().toString());
+        if (currentFile != null) {
+            try {
+                Scanner s = new Scanner(currentFile);
+                while (s.hasNextLine()) editor.append(s.nextLine() + "\n");
+                s.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
