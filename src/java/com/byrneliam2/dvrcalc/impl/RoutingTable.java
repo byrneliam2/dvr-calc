@@ -9,7 +9,7 @@ package com.byrneliam2.dvrcalc.impl;
  * Represents a routing table with a 2D array. Rows are added
  * and returned through operations.
  */
-class RoutingTable {
+public class RoutingTable {
 
     /*
      * Table is represented with neighbours across the top
@@ -48,11 +48,11 @@ class RoutingTable {
         return -1;
     }
 
-    char getDestinationAt(int i) {
+    public char getDestinationAt(int i) {
         return destinations[i];
     }
 
-    char getNeighbourAt(int i) {
+    public char getNeighbourAt(int i) {
         return neighbours[i];
     }
 
@@ -70,7 +70,7 @@ class RoutingTable {
         table[count++] = row;
     }
 
-    int[] getRow(int number) {
+    public int[] getRow(int number) {
         return table[number];
     }
 
@@ -108,11 +108,11 @@ class RoutingTable {
 
     /* ========================== ATTRIBUTE GETTERS ============================== */
 
-    int destinationSize() {
+    public int destinationSize() {
         return table.length;
     }
 
-    int neighbourSize() {
+    public int neighbourSize() {
         return table[0].length;
     }
 }

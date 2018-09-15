@@ -103,7 +103,7 @@ public class Node {
         return neighbours;
     }
 
-    RoutingTable getTable() {
+    public RoutingTable getTable() {
         return table;
     }
 

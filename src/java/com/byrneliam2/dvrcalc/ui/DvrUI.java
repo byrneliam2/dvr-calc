@@ -8,6 +8,7 @@ package com.byrneliam2.dvrcalc.ui;
 import com.byrneliam2.dvrcalc.common.UIConstants;
 import com.byrneliam2.dvrcalc.impl.DistanceVectorRouter;
 import com.byrneliam2.dvrcalc.impl.Node;
+import com.byrneliam2.dvrcalc.impl.RoutingTable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -159,6 +160,7 @@ public class DvrUI implements DvrUIListener {
 
     private void onRun() {
         router.onRun();
+        printAll();
     }
 
     private void onRoute() {
@@ -172,39 +174,39 @@ public class DvrUI implements DvrUIListener {
         display.repaint();
     }
 
-//    /**
-//     * Print the routing table for each node on the screen.
-//     */
-//    private void printAll() {
-//        for (Node node : nodes) {
-//            RoutingTable table = node.getTable();
-//
-//            // print the top neighbour line
-//            UI.println("Node " + node.getKey());
-//            UI.print("    ");
-//            for (int i = 0; i < table.neighbourSize(); i++)
-//                UI.print(table.getNeighbourAt(i) + " ");
-//            UI.println();
-//
-//            // print the destination and the link values
-//            for (int i = 0; i < table.destinationSize(); i++) {
-//
-//                // print the destination
-//                UI.print(" " + table.getDestinationAt(i) + ": ");
-//
-//                // print all values from this row of the table
-//                int[] row = table.getRow(i);
-//                for (int j = 0; j < table.neighbourSize(); j++) {
-//                    String str = row[j] + "";
-//                    if (row[j] == Integer.MAX_VALUE) str = "/";
-//                    UI.print(str + " ");
-//                }
-//                UI.println();
-//            }
-//            UI.println();
-//        }
-//        UI.println("-----------------");
-//    }
+    /**
+     * Print the routing table for each node on the screen.
+     */
+    private void printAll() {
+        for (Node node : router.getNodes()) {
+            RoutingTable table = node.getTable();
+
+            // print the top neighbour line
+            System.out.println("Node " + node.getKey());
+            System.out.print("    ");
+            for (int i = 0; i < table.neighbourSize(); i++)
+                System.out.print(table.getNeighbourAt(i) + " ");
+            System.out.println();
+
+            // print the destination and the link values
+            for (int i = 0; i < table.destinationSize(); i++) {
+
+                // print the destination
+                System.out.print(" " + table.getDestinationAt(i) + ": ");
+
+                // print all values from this row of the table
+                int[] row = table.getRow(i);
+                for (int j = 0; j < table.neighbourSize(); j++) {
+                    String str = row[j] + "";
+                    if (row[j] == Integer.MAX_VALUE) str = "/";
+                    System.out.print(str + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+        System.out.println("-----------------");
+    }
 //
 //    /**
 //     * Print the current path stored in the currentPath attribute.
