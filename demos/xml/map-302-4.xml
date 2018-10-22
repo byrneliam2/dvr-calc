@@ -1,0 +1,25 @@
+<!-- DVR Calculator XML File - ALL NODES AND NEIGHBOURS MUST BE ORDERED -->
+
+<graph>
+    <node key="A" x="100" y="100">
+        <neighbour key="B" cost="3"/>
+        <neighbour key="D" cost="1"/>
+    </node>
+
+    <node key="B" x="300" y="100">
+        <neighbour key="A" cost="3"/>
+        <neighbour key="C" cost="2"/>
+        <neighbour key="D" cost="5"/>
+    </node>
+
+    <node key="C" x="300" y="300">
+        <neighbour key="B" cost="2"/>
+        <neighbour key="D" cost="4"/>
+    </node>
+
+    <node key="D" x="100" y="300">
+        <neighbour key="A" cost="1"/>
+        <neighbour key="B" cost="5"/>
+        <neighbour key="C" cost="4"/>
+    </node>
+</graph>
